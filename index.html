@@ -1,6 +1,123 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<script>
+(function(){
+  // ============================================
+  // LISTA DE ALUNOS - edite os códigos aqui
+  // ============================================
+  var ALUNOS = {
+    "ANA2026":      "Ana Beatriz",
+    "CARLA2026":    "Carla Mendes",
+    "DIANA2026":    "Diana Souza",
+    "FERNANDA2026": "Fernanda Lima",
+    "GABRIELA2026": "Gabriela Rocha",
+    "ISABELA2026":  "Isabela Castro",
+    "JULIA2026":    "Julia Ferreira",
+    "LARISSA2026":  "Larissa Nunes",
+    "MARIANA2026":  "Mariana Alves",
+    "NATALIA2026":  "Natália Borges",
+    "PATRICIA2026": "Patrícia Gomes",
+    "RAFAELA2026":  "Rafaela Moura",
+    "SABRINA2026":  "Sabrina Teixeira",
+    "TATIANE2026":  "Tatiane Cardoso",
+    "VIVIANE2026":  "Viviane Pinto",
+    "ANDRE2026":    "André Oliveira",
+    "BRUNO2026":    "Bruno Martins",
+    "CARLOS2026":   "Carlos Eduardo",
+    "DIEGO2026":    "Diego Pereira",
+    "EDUARDO2026":  "Eduardo Santos",
+    "FELIPE2026":   "Felipe Araújo",
+    "GUSTAVO2026":  "Gustavo Ribeiro",
+    "HENRIQUE2026": "Henrique Costa",
+    "IGOR2026":     "Igor Nascimento",
+    "JOAO2026":     "João Pedro",
+    "LUCAS2026":    "Lucas Vieira",
+    "MARCOS2026":   "Marcos Freitas",
+    "NICOLAS2026":  "Nicolas Barros",
+    "PEDRO2026":    "Pedro Henrique",
+    "RAFAEL2026":   "Rafael Correia",
+    "RODRIGO2026":  "Rodrigo Cunha",
+    "THIAGO2026":   "Thiago Lopes",
+    "VITOR2026":    "Vitor Carvalho",
+    "WILLIAN2026":  "Willian Dias",
+  };
+  // ============================================
+
+  function mostrarLogin(erro){
+    document.body.style.display = "none";
+    var overlay = document.createElement("div");
+    overlay.id = "login-overlay";
+    overlay.innerHTML = `
+      <div style="
+        position:fixed;top:0;left:0;width:100%;height:100%;
+        background:linear-gradient(135deg,#0D47A1 0%,#1a237e 100%);
+        display:flex;align-items:center;justify-content:center;
+        z-index:99999;font-family:'Sora',sans-serif;
+      ">
+        <div style="
+          background:#fff;border-radius:20px;padding:40px 32px;
+          max-width:380px;width:90%;text-align:center;
+          box-shadow:0 20px 60px rgba(0,0,0,0.3);
+        ">
+          <div style="font-size:40px;margin-bottom:12px">🎓</div>
+          <h2 style="color:#0D47A1;font-size:20px;margin-bottom:4px">UFMA 2026</h2>
+          <p style="color:#5A6A8A;font-size:12px;margin-bottom:24px">Digite seu código de acesso pessoal</p>
+          <input id="codigo-input" type="text" placeholder="Seu código (ex: JOAO2026)"
+            style="
+              width:100%;padding:12px 16px;border:2px solid #DDE6F5;
+              border-radius:10px;font-size:14px;outline:none;
+              font-family:'Sora',sans-serif;color:#1A2340;
+              text-transform:uppercase;letter-spacing:1px;
+              transition:border .2s;
+            "
+            onkeydown="if(event.key==='Enter') verificarCodigo()"
+            onfocus="this.style.borderColor='#1565C0'"
+            onblur="this.style.borderColor='#DDE6F5'"
+            oninput="this.value=this.value.toUpperCase()"
+          />
+          <div id="erro-msg" style="color:#C62828;font-size:12px;margin-top:8px;min-height:18px">
+            ${erro || ""}
+          </div>
+          <button onclick="verificarCodigo()" style="
+            width:100%;margin-top:12px;padding:13px;
+            background:linear-gradient(135deg,#0D47A1,#1565C0);
+            color:#fff;border:none;border-radius:10px;
+            font-size:15px;font-weight:700;cursor:pointer;
+            font-family:'Sora',sans-serif;transition:opacity .2s;
+          "
+          onmouseover="this.style.opacity='.9'"
+          onmouseout="this.style.opacity='1'"
+          >Acessar</button>
+          <p style="color:#5A6A8A;font-size:11px;margin-top:16px">
+            Não tem um código? Entre em contato com a coordenação.
+          </p>
+        </div>
+      </div>
+    `;
+    document.body.parentNode.insertBefore(overlay, document.body);
+    document.body.style.display = "";
+    setTimeout(()=>{ document.getElementById("codigo-input").focus(); }, 100);
+  }
+
+  window.verificarCodigo = function(){
+    var input = document.getElementById("codigo-input").value.trim().toUpperCase();
+    if(ALUNOS[input]){
+      sessionStorage.setItem("acesso", "ok");
+      sessionStorage.setItem("aluno", ALUNOS[input]);
+      document.getElementById("login-overlay").remove();
+    } else {
+      document.getElementById("erro-msg").textContent = "Código inválido. Verifique e tente novamente.";
+      document.getElementById("codigo-input").value = "";
+      document.getElementById("codigo-input").focus();
+    }
+  }
+
+  if(sessionStorage.getItem("acesso") !== "ok"){
+    document.addEventListener("DOMContentLoaded", function(){ mostrarLogin(); });
+  }
+})();
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UFMA 2026 · Assistente em Administração</title>
