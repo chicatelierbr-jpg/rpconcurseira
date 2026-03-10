@@ -1,0 +1,2112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UFMA 2026 · Assistente em Administração</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap');
+:root{
+  --az:#0D47A1;--az2:#1565C0;--az3:#E3F2FD;
+  --vd:#00897B;--vd2:#26A69A;--vd3:#E8F5E9;
+  --vm:#C62828;--vm3:#FFEBEE;
+  --am:#F9A825;--am3:#FFF8E1;
+  --ro:#7B1FA2;--ro3:#F3E5F5;
+  --bg:#F0F4FA;--card:#fff;--borda:#DDE6F5;
+  --tx:#1A2340;--txl:#5A6A8A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh}
+
+/* ===== TOPO ===== */
+.topo{background:linear-gradient(135deg,#0D47A1 0%,#1a237e 100%);color:#fff;position:sticky;top:0;z-index:200;box-shadow:0 4px 24px rgba(13,71,161,.45)}
+.topo-bar{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.15)}
+.logo{width:36px;height:36px;background:rgba(255,255,255,.18);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.topo-title{font-size:14px;font-weight:700;line-height:1.2}
+.topo-sub{font-size:10px;opacity:.75;font-weight:300}
+.prova-badge{margin-left:auto;background:var(--am);color:#1a2340;padding:4px 10px;border-radius:16px;font-size:10px;font-weight:700;text-align:center;line-height:1.3;flex-shrink:0}
+
+/* countdown */
+.cd-bar{background:rgba(0,0,0,.22);padding:7px 16px;display:flex;align-items:center;gap:8px;font-size:11px;flex-wrap:wrap}
+.cd-itens{display:flex;gap:6px;margin-left:auto}
+.cd-box{background:rgba(255,255,255,.14);border-radius:6px;padding:2px 7px;text-align:center;min-width:44px}
+.cd-n{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:700;display:block}
+.cd-l{font-size:8px;opacity:.65;text-transform:uppercase;letter-spacing:.5px}
+
+/* ===== BARRA DE PROGRESSO GLOBAL ===== */
+.prog-global{background:rgba(0,0,0,.2);padding:8px 16px 6px;border-bottom:1px solid rgba(255,255,255,.1)}
+.pg-titulo{font-size:10px;opacity:.75;letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px;display:flex;justify-content:space-between}
+.pg-rail{height:10px;background:rgba(255,255,255,.15);border-radius:5px;overflow:hidden;position:relative}
+.pg-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,#00BCD4,#4CAF50);transition:width .7s ease;position:relative}
+.pg-fill::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);animation:shimmer 2s infinite}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.pg-segs{display:flex;gap:0;margin-top:5px}
+.pg-seg{flex:1;text-align:center;font-size:9px;opacity:.7;padding:0 2px;border-right:1px solid rgba(255,255,255,.15);cursor:pointer;transition:opacity .2s}
+.pg-seg:last-child{border:none}
+.pg-seg:hover{opacity:1}
+.pg-seg .ps-n{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:11px;color:#80DEEA;display:block}
+
+/* nav tabs */
+.nav-tabs{display:flex;overflow-x:auto;background:#fff;border-bottom:2px solid var(--borda);-webkit-overflow-scrolling:touch}
+.nav-tabs::-webkit-scrollbar{display:none}
+.ntab{flex-shrink:0;padding:10px 14px;border:none;background:none;font-family:'Sora',sans-serif;font-size:11px;font-weight:700;color:var(--txl);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;white-space:nowrap;position:relative}
+.ntab.ok::after{content:'✓';position:absolute;top:4px;right:4px;font-size:8px;color:var(--vd);background:var(--vd3);border-radius:50%;width:14px;height:14px;display:flex;align-items:center;justify-content:center}
+.ntab.ativo{color:var(--az);border-bottom-color:var(--az)}
+.ntab:hover{color:var(--az)}
+
+/* ===== MAIN ===== */
+.main{max-width:920px;margin:0 auto;padding:18px 14px 90px}
+.secao{display:none}.secao.ativa{display:block}
+
+/* cards */
+.card{background:#fff;border-radius:14px;border:1px solid var(--borda);padding:18px;margin-bottom:14px;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.ctit{font-size:14px;font-weight:700;color:var(--az);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.cico{width:28px;height:28px;background:var(--az3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;margin-left:4px}
+.bq{background:var(--vm3);color:var(--vm)}.bm{background:var(--am3);color:#E65100}.bi{background:var(--az3);color:var(--az)}.bv{background:var(--vd3);color:var(--vd)}
+
+/* conteúdo */
+.c p{font-size:13px;line-height:1.75;color:#243058;margin-bottom:9px}
+.c strong{color:var(--az)}
+.c ul,.c ol{padding-left:18px;margin:8px 0}
+.c li{font-size:12.5px;line-height:1.75;margin-bottom:3px}
+.c h3{font-size:11.5px;font-weight:800;color:var(--tx);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.8px;border-bottom:2px solid var(--borda);padding-bottom:4px}
+.c h4{font-size:12.5px;font-weight:700;color:var(--az2);margin:10px 0 4px}
+.destaque{background:var(--am3);border-left:4px solid var(--am);padding:10px 13px;border-radius:0 8px 8px 0;margin:10px 0;font-size:12.5px;line-height:1.65}
+.atencao{background:var(--vm3);border-left:4px solid var(--vm);padding:10px 13px;border-radius:0 8px 8px 0;margin:10px 0;font-size:12.5px;line-height:1.65}
+.dica{background:var(--vd3);border-left:4px solid var(--vd);padding:10px 13px;border-radius:0 8px 8px 0;margin:10px 0;font-size:12.5px;line-height:1.65}
+.roxo{background:var(--ro3);border-left:4px solid var(--ro);padding:10px 13px;border-radius:0 8px 8px 0;margin:10px 0;font-size:12.5px;line-height:1.65}
+.c table{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0}
+.c th{background:var(--az);color:#fff;padding:7px 9px;text-align:left;font-weight:700;font-size:11px}
+.c td{padding:6px 9px;border-bottom:1px solid var(--borda);vertical-align:top}
+.c tr:nth-child(even) td{background:#F7FAFE}
+.c code{background:#EEF2FA;color:#C62828;padding:1px 5px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:11.5px}
+
+/* accordion */
+.acc-item{margin-bottom:7px}
+.acc-btn{width:100%;text-align:left;border:none;background:#fff;border:1.5px solid var(--borda);border-radius:10px;padding:12px 14px;font-family:'Sora',sans-serif;font-size:12.5px;font-weight:700;cursor:pointer;display:flex;justify-content:space-between;align-items:center;color:var(--tx);transition:all .2s}
+.acc-btn:hover,.acc-btn.aberto{border-color:var(--az);color:var(--az);background:#F0F7FF}
+.acc-btn.aberto{border-radius:10px 10px 0 0}
+.acc-content{display:none;background:#fff;border:1.5px solid var(--az);border-top:none;border-radius:0 0 10px 10px;padding:16px}
+.acc-content.vis{display:block}
+.acc-seta{transition:transform .2s;flex-shrink:0}
+.acc-btn.aberto .acc-seta{transform:rotate(180deg)}
+/* checkbox de leitura no accordion */
+.acc-check{display:flex;align-items:center;gap:6px;margin-top:14px;padding-top:10px;border-top:1px solid var(--borda)}
+.acc-check input{width:16px;height:16px;accent-color:var(--vd);cursor:pointer}
+.acc-check label{font-size:12px;color:var(--vd);font-weight:600;cursor:pointer}
+
+/* mapa mental */
+.mapa{background:linear-gradient(135deg,#0D47A1 0%,#1a237e 100%);border-radius:14px;padding:18px;margin-top:14px;color:#fff}
+.mapa-tit{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;opacity:.75;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.mapa-center{background:rgba(255,255,255,.2);border-radius:12px;padding:10px 14px;text-align:center;font-size:13px;font-weight:700;margin-bottom:12px;border:2px solid rgba(255,255,255,.4)}
+.mapa-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.mapa-ramo{background:rgba(255,255,255,.1);border-radius:9px;padding:9px 11px;border:1px solid rgba(255,255,255,.18)}
+.mapa-rtit{font-size:10px;font-weight:700;color:#90CAF9;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.mapa-ramo ul{list-style:none;padding:0}
+.mapa-ramo li{font-size:11px;padding:2px 0;opacity:.9;display:flex;align-items:flex-start;gap:4px}
+.mapa-ramo li::before{content:"→";color:#80DEEA;flex-shrink:0}
+
+/* progresso cards home */
+.prog-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px}
+.pc{background:#fff;border-radius:12px;border:1px solid var(--borda);padding:13px;text-align:center}
+.pc-n{font-size:22px;font-weight:800;color:var(--az)}
+.pc-l{font-size:10px;color:var(--txl);margin-top:2px}
+.mini-rail{height:5px;background:var(--borda);border-radius:3px;overflow:hidden;margin:7px 0 3px}
+.mini-fill{height:100%;border-radius:3px;transition:width .6s}
+
+/* disciplinas progresso */
+.disp-list{display:flex;flex-direction:column;gap:8px}
+.disp-item{background:#fff;border:1px solid var(--borda);border-radius:10px;padding:11px 14px}
+.disp-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.disp-ico{font-size:18px}
+.disp-nome{font-size:13px;font-weight:700;flex:1}
+.disp-pct{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;color:var(--az)}
+.disp-rail{height:7px;background:var(--borda);border-radius:4px;overflow:hidden}
+.disp-fill{height:100%;border-radius:4px;transition:width .7s}
+
+/* timeline */
+.tl{position:relative;padding-left:26px}
+.tl::before{content:'';position:absolute;left:7px;top:0;bottom:0;width:2px;background:var(--borda)}
+.tl-item{position:relative;margin-bottom:14px}
+.tl-item::before{content:'';position:absolute;left:-23px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--az);border:2px solid #fff;box-shadow:0 0 0 2px var(--az)}
+.tl-item.pass::before{background:#B0BEC5;box-shadow:0 0 0 2px #B0BEC5}
+.tl-item.hj::before{background:var(--am);box-shadow:0 0 0 2px var(--am);animation:pulse 1.5s infinite}
+.tl-item.prova::before{background:var(--vm);box-shadow:0 0 0 2px var(--vm);width:16px;height:16px;left:-25px;top:2px}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.35)}}
+.tl-data{font-size:10px;color:var(--txl);font-family:'IBM Plex Mono',monospace}
+.tl-ev{font-size:13px;font-weight:700}
+.tl-desc{font-size:11.5px;color:var(--txl);margin-top:2px}
+
+/* questões */
+.q-card{background:#fff;border-radius:12px;border:1px solid var(--borda);padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.q-head{display:flex;align-items:center;gap:7px;margin-bottom:11px}
+.q-num{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;background:var(--bg);padding:2px 7px;border-radius:5px;color:var(--txl)}
+.q-area{font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:.5px}
+.q-txt{font-size:13px;line-height:1.65;margin-bottom:12px}
+.opcoes{display:flex;flex-direction:column;gap:7px}
+.opcao{padding:9px 12px;border-radius:8px;border:2px solid var(--borda);font-size:12.5px;cursor:pointer;transition:all .2s;display:flex;align-items:flex-start;gap:9px;text-align:left;background:#fff;font-family:'Sora',sans-serif;width:100%}
+.opcao:hover{border-color:var(--az2);background:#F0F7FF}
+.opcao.correta{border-color:var(--vd);background:var(--vd3);color:#1B5E20}
+.opcao.errada{border-color:var(--vm);background:var(--vm3);color:#7F0000}
+.op-letra{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:11px;min-width:16px;color:var(--txl);flex-shrink:0}
+.opcao.correta .op-letra{color:var(--vd)}
+.opcao.errada .op-letra{color:var(--vm)}
+.gab-exp{display:none;margin-top:11px;background:#F0F7FF;border-left:4px solid var(--az);padding:11px 13px;border-radius:0 8px 8px 0;font-size:12.5px;line-height:1.65}
+.q-score{text-align:center;padding:16px;font-size:14px;font-weight:700}
+
+/* filtros */
+.filtros{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.fb{padding:5px 13px;border-radius:16px;border:2px solid var(--borda);background:#fff;font-family:'Sora',sans-serif;font-size:11px;font-weight:700;cursor:pointer;color:var(--txl);transition:all .2s}
+.fb.ativo{background:var(--az);border-color:var(--az);color:#fff}
+
+/* flashcard */
+.fc-wrap{perspective:1000px;height:220px;cursor:pointer;margin:14px 0}
+.fc{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .5s}
+.fc.flip{transform:rotateY(180deg)}
+.fc-face{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:14px;display:flex;align-items:center;justify-content:center;padding:18px;text-align:center}
+.fc-f{background:linear-gradient(135deg,var(--az) 0%,#1a237e 100%);color:#fff;box-shadow:0 6px 24px rgba(13,71,161,.35)}
+.fc-v{background:#fff;border:2px solid var(--borda);transform:rotateY(180deg);box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.fc-txt{font-size:14px;font-weight:600;line-height:1.55}
+.fc-hint{font-size:10px;opacity:.6;position:absolute;bottom:12px}
+.fc-nav{display:flex;gap:9px;justify-content:center;align-items:center;margin-top:8px}
+
+/* plano */
+.plan-dia{background:#fff;border:1px solid var(--borda);border-radius:11px;padding:12px 14px;display:flex;align-items:flex-start;gap:12px;margin-bottom:8px}
+.plan-d-num{min-width:42px;height:42px;background:var(--az);color:#fff;border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:16px;font-weight:800;line-height:1;flex-shrink:0}
+.plan-d-num span{font-size:9px;font-weight:400;opacity:.8}
+.plan-d-info{flex:1}
+.plan-d-tit{font-size:12.5px;font-weight:700;margin-bottom:3px}
+.plan-d-top{font-size:11.5px;color:var(--txl);line-height:1.5}
+.plan-d-ch{width:22px;height:22px;border-radius:6px;border:2px solid var(--borda);cursor:pointer;flex-shrink:0;margin-top:9px;display:flex;align-items:center;justify-content:center;transition:all .2s;background:#fff}
+.plan-d-ch.ok{background:var(--vd);border-color:var(--vd);color:#fff}
+
+/* btn */
+.btn{padding:9px 18px;border-radius:9px;border:none;font-family:'Sora',sans-serif;font-weight:700;font-size:12px;cursor:pointer;transition:all .2s}
+.baz{background:var(--az);color:#fff}.baz:hover{background:var(--az2)}
+.bvd{background:var(--vd);color:#fff}
+.bout{background:transparent;border:2px solid var(--borda);color:var(--txl)}
+
+/* footer */
+.footer{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--borda);display:flex;padding:6px 0;box-shadow:0 -4px 18px rgba(0,0,0,.08);z-index:199}
+.fn{flex:1;border:none;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 3px;cursor:pointer;font-family:'Sora',sans-serif;font-size:9px;font-weight:700;color:var(--txl);transition:all .2s}
+.fn.ativo{color:var(--az)}
+.fn-i{font-size:19px}
+
+/* grid 2 cols */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:580px){.g2{grid-template-columns:1fr}.mapa-grid{grid-template-columns:1fr}}
+
+/* exemplos destacados */
+.exemplo{background:#F8F9FF;border:1.5px dashed #C5CAE9;border-radius:9px;padding:11px 13px;margin:9px 0;font-size:12.5px}
+.exemplo strong{color:#3949AB}
+
+/* lista numerada estilizada */
+.nl{list-style:none;padding:0;counter-reset:nl}
+.nl li{counter-increment:nl;padding:5px 0 5px 30px;position:relative;font-size:12.5px;line-height:1.65;border-bottom:1px solid var(--borda)}
+.nl li:last-child{border:none}
+.nl li::before{content:counter(nl);position:absolute;left:0;top:5px;width:20px;height:20px;background:var(--az);color:#fff;border-radius:50%;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1}
+
+/* chip */
+.chip{display:inline-block;background:var(--az3);color:var(--az);padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;margin:2px}
+
+</style>
+</head>
+<body>
+
+<!-- ===== TOPO ===== -->
+<div class="topo">
+  <div class="topo-bar">
+    <div class="logo">📚</div>
+    <div>
+      <div class="topo-title">UFMA 2026 · Estuda Aí!</div>
+      <div class="topo-sub">Assistente em Administração · Nível Médio</div>
+    </div>
+    <div class="prova-badge">📅 Prova<br><strong>26/04/2026</strong></div>
+  </div>
+
+  <div class="cd-bar">
+    <span style="font-size:10px;opacity:.8">⏱ Faltam para a prova:</span>
+    <div class="cd-itens">
+      <div class="cd-box"><span class="cd-n" id="cd-d">--</span><span class="cd-l">dias</span></div>
+      <div class="cd-box"><span class="cd-n" id="cd-h">--</span><span class="cd-l">horas</span></div>
+      <div class="cd-box"><span class="cd-n" id="cd-m">--</span><span class="cd-l">min</span></div>
+    </div>
+  </div>
+
+  <!-- BARRA DE PROGRESSO GLOBAL -->
+  <div class="prog-global">
+    <div class="pg-titulo">
+      <span>🎯 Progresso Geral de Estudo</span>
+      <span id="pg-pct-txt" style="color:#80DEEA;font-family:'IBM Plex Mono',monospace;font-size:12px">0%</span>
+    </div>
+    <div class="pg-rail"><div class="pg-fill" id="pg-fill" style="width:0%"></div></div>
+    <div class="pg-segs">
+      <div class="pg-seg" onclick="irSecao('portugues')"><span class="ps-n" id="ps-pt">0%</span>Português</div>
+      <div class="pg-seg" onclick="irSecao('informatica')"><span class="ps-n" id="ps-inf">0%</span>Informática</div>
+      <div class="pg-seg" onclick="irSecao('legislacao')"><span class="ps-n" id="ps-leg">0%</span>Legislação</div>
+      <div class="pg-seg" onclick="irSecao('especificos')"><span class="ps-n" id="ps-esp">0%</span>Específicos</div>
+      <div class="pg-seg" onclick="irSecao('questoes')"><span class="ps-n" id="ps-q">0%</span>Questões</div>
+    </div>
+  </div>
+
+  <div class="nav-tabs" id="navTabs">
+    <button class="ntab ativo" data-sec="home" onclick="irSecao('home')">🏠 Início</button>
+    <button class="ntab" data-sec="portugues" onclick="irSecao('portugues')">📝 Português</button>
+    <button class="ntab" data-sec="informatica" onclick="irSecao('informatica')">💻 Informática</button>
+    <button class="ntab" data-sec="legislacao" onclick="irSecao('legislacao')">⚖️ Legislação</button>
+    <button class="ntab" data-sec="especificos" onclick="irSecao('especificos')">🏢 Específicos</button>
+    <button class="ntab" data-sec="questoes" onclick="irSecao('questoes')">✏️ Questões</button>
+    <button class="ntab" data-sec="flashcards" onclick="irSecao('flashcards')">🃏 Flashcards</button>
+    <button class="ntab" data-sec="plano" onclick="irSecao('plano')">📅 Plano</button>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ========== INÍCIO ========== -->
+<div id="home" class="secao ativa">
+  <div class="card" style="background:linear-gradient(135deg,#0D47A1,#1a237e);color:#fff;border:none">
+    <div style="font-size:26px;margin-bottom:8px">👋 Olá, futura servidora!</div>
+    <p style="opacity:.9;font-size:13px;line-height:1.65">App criado com base no <strong>Edital UFMA nº 035/2026</strong>. Marque os tópicos lidos, faça questões e acompanhe seu progresso em tempo real. Faltam <strong id="home-dias">--</strong> dias!</p>
+  </div>
+
+  <div class="prog-cards">
+    <div class="pc"><div class="pc-n" id="hpc-total">0%</div><div class="mini-rail"><div class="mini-fill" id="hpf-total" style="width:0%;background:var(--az)"></div></div><div class="pc-l">Progresso Geral</div></div>
+    <div class="pc"><div class="pc-n" id="hpc-topicos">0/0</div><div class="mini-rail"><div class="mini-fill" id="hpf-topicos" style="width:0%;background:var(--ro)"></div></div><div class="pc-l">Tópicos Lidos</div></div>
+    <div class="pc"><div class="pc-n" id="hpc-q">0%</div><div class="mini-rail"><div class="mini-fill" id="hpf-q" style="width:0%;background:var(--vd)"></div></div><div class="pc-l">Acertos Questões</div></div>
+    <div class="pc"><div class="pc-n" id="hpc-dias">0</div><div class="mini-rail"><div class="mini-fill" id="hpf-dias" style="width:0%;background:var(--am)"></div></div><div class="pc-l">Dias Estudados</div></div>
+  </div>
+
+  <!-- progresso por disciplina -->
+  <div class="card">
+    <div class="ctit"><div class="cico">📊</div> Progresso por Disciplina</div>
+    <div class="disp-list">
+      <div class="disp-item">
+        <div class="disp-row"><span class="disp-ico">📝</span><span class="disp-nome">Língua Portuguesa</span><span class="disp-pct" id="dp-pt">0%</span></div>
+        <div class="disp-rail"><div class="disp-fill" id="df-pt" style="width:0%;background:#1565C0"></div></div>
+      </div>
+      <div class="disp-item">
+        <div class="disp-row"><span class="disp-ico">💻</span><span class="disp-nome">Informática</span><span class="disp-pct" id="dp-inf">0%</span></div>
+        <div class="disp-rail"><div class="disp-fill" id="df-inf" style="width:0%;background:#00897B"></div></div>
+      </div>
+      <div class="disp-item">
+        <div class="disp-row"><span class="disp-ico">⚖️</span><span class="disp-nome">Legislação e Normas</span><span class="disp-pct" id="dp-leg">0%</span></div>
+        <div class="disp-rail"><div class="disp-fill" id="df-leg" style="width:0%;background:#F9A825"></div></div>
+      </div>
+      <div class="disp-item">
+        <div class="disp-row"><span class="disp-ico">🏢</span><span class="disp-nome">Conhecimentos Específicos</span><span class="disp-pct" id="dp-esp">0%</span></div>
+        <div class="disp-rail"><div class="disp-fill" id="df-esp" style="width:0%;background:#7B1FA2"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ctit"><div class="cico">📋</div> Estrutura da Prova Objetiva</div>
+    <div class="c">
+      <table>
+        <tr><th>Disciplina</th><th>Qtd.</th><th>Pontos</th><th>Mínimo</th></tr>
+        <tr><td>📝 Língua Portuguesa</td><td><strong>10</strong></td><td>20 pts</td><td>8 pts (40%)</td></tr>
+        <tr><td>💻 Noções de Informática</td><td><strong>05</strong></td><td>10 pts</td><td>4 pts (40%)</td></tr>
+        <tr><td>⚖️ Legislação e Normas</td><td><strong>10</strong></td><td>20 pts</td><td>8 pts (40%)</td></tr>
+        <tr><td>🏢 Conhecimentos Específicos</td><td><strong>30</strong></td><td>50 pts</td><td>20 pts (40%)</td></tr>
+        <tr style="font-weight:700;background:#E3F2FD"><td>TOTAL</td><td>55</td><td>100 pts</td><td>50 pts (50%)</td></tr>
+      </table>
+      <div class="atencao">🔴 <strong>Dupla eliminação:</strong> precisa de no mínimo 50% do total (50 pts) E 40% em cada disciplina individualmente. Reprovar em qualquer uma elimina!</div>
+      <p><strong>Data:</strong> 26/04/2026 — <strong>Horário:</strong> 14h | <strong>Duração:</strong> 4 horas | <strong>Local:</strong> São Luís–MA</p>
+      <p><strong>Remuneração:</strong> R$ 3.029,90 (básico) + auxílio-alimentação + outros | <strong>Jornada:</strong> 40h semanais</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ctit"><div class="cico">🎯</div> Estratégia para Aprovação</div>
+    <div class="c">
+      <div class="dica">💚 <strong>Específicos (30 questões/50 pts):</strong> é onde você GANHA. Como administradora, já tem base. Leve ao máximo!</div>
+      <div class="dica">💚 <strong>Legislação (Lei 8.112/90):</strong> é a matéria que mais reprova. Estude diariamente pelo menos 1h.</div>
+      <div class="atencao">🔴 <strong>Informática:</strong> são só 5 questões mas 2 erros = eliminação! Não negligencie.</div>
+      <div class="destaque">⭐ <strong>Regra de ouro FSADU:</strong> a banca valoriza literalidade da lei. Decore artigos exatos, prazos e percentuais.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PORTUGUÊS ========== -->
+<div id="portugues" class="secao">
+  <div class="card">
+    <div class="ctit"><div class="cico">📝</div> Língua Portuguesa <span class="badge bi">10 questões · 20 pts</span></div>
+    <div class="c"><p>A FSADU costuma cobrar <strong>60-70% interpretação de texto</strong> e 30-40% gramática. Foque nos tópicos abaixo na ordem de frequência.</p></div>
+  </div>
+
+  <!-- 1. Interpretação -->
+  <div class="acc-item">
+    <button class="acc-btn" data-topic="pt-1" onclick="toggleAcc(this)">
+      <span>📖 1. Interpretação e Compreensão de Texto <span class="badge bq">MAIS COBRADO</span></span><span class="acc-seta">▼</span>
+    </button>
+    <div class="acc-content">
+      <div class="c">
+        <p>Interpretação de texto é a habilidade de extrair informações explícitas e implícitas de um texto, compreender a intenção do autor e identificar relações entre as ideias.</p>
+        <h3>Estratégia de resolução (passo a passo)</h3>
+        <ol class="nl">
+          <li><strong>Leia o enunciado da questão ANTES do texto</strong> — assim você sabe o que procurar enquanto lê</li>
+          <li>Leia o texto uma primeira vez buscando o tema central e a ideia geral</li>
+          <li>Releia os trechos específicos citados nas questões</li>
+          <li>Elimine alternativas claramente erradas</li>
+          <li>Cuidado com alternativas que mudam o sentido com palavras como "apenas", "somente", "sempre", "nunca"</li>
+        </ol>
+        <h3>Tipos de questão de interpretação</h3>
+        <div class="g2">
+          <div>
+            <h4>Ideia principal / tese</h4>
+            <p>Perguntas: "O texto trata de..." ou "O autor defende que...". A tese costuma estar no 1º ou último parágrafo.</p>
+            <h4>Inferência implícita</h4>
+            <p>Perguntas: "Pode-se concluir que..." ou "É possível depreender...". A resposta não está escrita, mas é deduzível do contexto.</p>
+          </div>
+          <div>
+            <h4>Vocabulário em contexto</h4>
+            <p>Perguntas: "A palavra X, no texto, significa...". Sempre releia a palavra no contexto da frase.</p>
+            <h4>Referência pronominal</h4>
+            <p>Perguntas: "O pronome 'ele' refere-se a...". Localize o antecedente mais próximo e lógico.</p>
+          </div>
+        </div>
+        <h3>Conectivos — os mais cobrados em interpretação</h3>
+        <table>
+          <tr><th>Tipo</th><th>Exemplos</th><th>Relação que indica</th></tr>
+          <tr><td>Adição</td><td>e, também, além disso, ademais, ainda, outrossim</td><td>soma de ideias</td></tr>
+          <tr><td>Oposição</td><td>mas, porém, contudo, entretanto, todavia, no entanto</td><td>contradição</td></tr>
+          <tr><td>Conclusão</td><td>logo, portanto, assim, então, por isso, consequentemente</td><td>resultado de algo</td></tr>
+          <tr><td>Causa</td><td>porque, pois, já que, visto que, uma vez que</td><td>motivo/razão</td></tr>
+          <tr><td>Concessão</td><td>embora, ainda que, mesmo que, apesar de</td><td>admite algo, mas ressalva</td></tr>
+          <tr><td>Condição</td><td>se, caso, desde que, contanto que</td><td>hipótese</td></tr>
+          <tr><td>Finalidade</td><td>para, a fim de, com o intuito de</td><td>objetivo</td></tr>
+        </table>
+        <h3>Tipologia Textual</h3>
+        <ul>
+          <li><strong>Narrativo:</strong> conta fatos com personagens, tempo, espaço. Verbos de ação no passado</li>
+          <li><strong>Descritivo:</strong> caracteriza, descreve seres, lugares, cenas. Verbos de estado (ser, estar, parecer)</li>
+          <li><strong>Dissertativo-argumentativo:</strong> defende uma tese com argumentos e contra-argumentos</li>
+          <li><strong>Expositivo:</strong> informa, explica, sem defender posição. Textos científicos e enciclopédicos</li>
+          <li><strong>Injuntivo/Instrucional:</strong> instrui, ordena. Manuais, receitas, editais, leis</li>
+        </ul>
+        <div class="atencao">🔴 Cuidado com <strong>distratores</strong>: alternativas que usam palavras do texto mas mudam completamente o sentido. Confirme sempre voltando ao trecho.</div>
+        <div class="acc-check">
+          <input type="checkbox" id="ck-pt-1" onchange="marcarTopico('pt-1','portugues',this)">
+          <label for="ck-pt-1">✅ Li e entendi este tópico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Ortografia -->
+  <div class="acc-item">
+    <button class="acc-btn" data-topic="pt-2" onclick="toggleAcc(this)">
+      <span>✏️ 2. Ortografia — Novo Acordo (2009) <span class="badge bm">COBRADO</span></span><span class="acc-seta">▼</span>
+    </button>
+    <div class="acc-content">
+      <div class="c">
+        <h3>Acentuação Gráfica</h3>
+        <div class="g2">
+          <div>
+            <h4>Oxítonas — recebem acento quando terminadas em:</h4>
+            <ul>
+              <li>A(s): sofá, sofás</li>
+              <li>E(s): café, cafés</li>
+              <li>O(s): avó, avós</li>
+              <li>EM / ENS: também, parabéns</li>
+              <li>ÉI(S) / ÓI(S): anéis, herói</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Proparoxítonas — TODAS são acentuadas:</h4>
+            <ul>
+              <li>pública, médico, ótimo</li>
+              <li>sólido, tráfego, lâmpada</li>
+              <li>Qualquer palavra com "tônica antepenúltima"</li>
+            </ul>
+          </div>
+        </div>
+        <h4>Paroxítonas — acentuadas quando terminadas em:</h4>
+        <p>L, R, X, N, UM/UNS, ÃO(S), Ã(S), EI(S), OI(S), I(S), U(S), PS, ON(S)</p>
+        <div class="exemplo"><strong>Exemplos:</strong> fácil (L), caráter (R), tórax (X), hífen (N), álbum (UM), ímã (Ã), jóquei (EI), bônus (US)</div>
+
+        <h3>Mudanças do Acordo de 2009 — O que NÃO existe mais</h3>
+        <div class="atencao">❌ <strong>Acento diferencial foi eliminado:</strong>
+          <ul>
+            <li>"pôde" (passado) e "pode" (presente) → ambos sem acento agora: <strong>pôde permanece</strong>, mas "pêlo/pelo", "pêra/pera", "péla/pela" → SEM acento diferencial</li>
+            <li>"vôo → voo", "ôo → oo" em verbos: creem, leem, veem, deem — SEM acento no hiato EE/OO</li>
+            <li>Ditongos abertos em paroxítonas: "ideia" (não ideía), "assembleia" (não assembléia), "plateia", "heroico"</li>
+          </ul>
+        </div>
+
+        <h3>Crase — Regras Completas</h3>
+        <p>A crase é a fusão da preposição <strong>A</strong> com o artigo feminino <strong>A(S)</strong>, resultando em <strong>À(S)</strong>.</p>
+        <h4>QUANDO usar crase:</h4>
+        <ul>
+          <li>Antes de palavras femininas que aceitam artigo "a": <em>Fui à escola / Vou às reuniões</em></li>
+          <li>Antes de locuções adverbiais femininas: <em>à tarde, à noite, às vezes, à toa, à vontade, às pressas</em></li>
+          <li>Antes de locuções prepositivas/conjuntivas: <em>à medida que, à proporção que</em></li>
+          <li>Antes de pronomes demonstrativos: <em>àquela, àquele, àquilo, àquelas, àqueles</em></li>
+        </ul>
+        <h4>QUANDO NÃO usar crase:</h4>
+        <ul>
+          <li>Antes de verbo: <em>Vim a pedir ajuda</em> (não "à pedir")</li>
+          <li>Antes de artigo indefinido "uma": <em>Fui a uma reunião</em></li>
+          <li>Antes de pronomes pessoais: <em>Dirijo-me a você / a ela / a mim</em></li>
+          <li>Antes de nomes masculinos sem artigo: <em>Vou a pé / a cavalo / a Recife</em></li>
+          <li>Antes de pronomes possessivos no singular (exceto se admitir artigo): <em>Refiro-me a sua mãe</em></li>
+        </ul>
+        <div class="dica">💡 <strong>Dica do "ao":</strong> substitua o nome feminino por masculino. Se ficar "ao", use crase. Ex: "Fui à escola" → "Fui ao colégio" ✅ → usa crase</div>
+
+        <h3>Por que / porque / porquê / por quê</h3>
+        <table>
+          <tr><th>Forma</th><th>Uso</th><th>Exemplo</th></tr>
+          <tr><td><strong>por que</strong></td><td>Pergunta indireta ou relativo (= pelo qual)</td><td>"Não sei por que você saiu." / "A razão por que vim."</td></tr>
+          <tr><td><strong>porque</strong></td><td>Resposta/explicação/causal</td><td>"Saí porque estava cansada."</td></tr>
+          <tr><td><strong>por quê</strong></td><td>Pergunta direta (fim de frase)</td><td>"Você saiu por quê?"</td></tr>
+          <tr><td><strong>porquê</strong></td><td>Substantivo (= a razão, o motivo)</td><td>"Explique o porquê da ausência."</td></tr>
+        </table>
+
+        <h3>Uso do Hífen (principais casos pós-2009)</h3>
+        <ul>
+          <li><strong>Com prefixos que terminam em vogal + palavra iniciada com mesma vogal:</strong> mini-iphone, anti-inflamatório, auto-observação</li>
+          <li><strong>Com prefixos EX, SOB, SEM, ALÉM, AQUÉM, RECÉM, PÓS, PRÉ, POR, PRÓ (tônicos):</strong> ex-marido, sem-terra, recém-nascido, pós-graduação</li>
+          <li><strong>Não usa hífen:</strong> antivírus, antissocial, extraoficial, semisseco (prefixo + consoante diferente de R/S)</li>
+          <li><strong>R e S dobram:</strong> antirreligioso, minissaia, ultrassom</li>
+        </ul>
+        <div class="acc-check">
+          <input type="checkbox" id="ck-pt-2" onchange="marcarTopico('pt-2','portugues',this)">
+          <label for="ck-pt-2">✅ Li e entendi este tópico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Concordância -->
+  <div class="acc-item">
+    <button class="acc-btn" data-topic="pt-3" onclick="toggleAcc(this)">
+      <span>🔗 3. Concordância Verbal e Nominal <span class="badge bm">COBRADO</span></span><span class="acc-seta">▼</span>
+    </button>
+    <div class="acc-content">
+      <div class="c">
+        <h3>Concordância Verbal — Casos especiais</h3>
+        <h4>Sujeito composto antes do verbo</h4>
+        <p>Verbo vai para o plural: <em>"João e Maria <strong>vieram</strong> à reunião."</em></p>
+        <h4>Sujeito composto depois do verbo</h4>
+        <p>Pode concordar com o mais próximo: <em>"<strong>Chegou</strong> o diretor e os funcionários."</em> ou <em>"<strong>Chegaram</strong> o diretor e os funcionários."</em></p>
+        <h4>Verbos impessoais — SINGULAR obrigatório</h4>
+        <table>
+          <tr><th>Verbo</th><th>Uso</th><th>Exemplo correto</th></tr>
+          <tr><td><strong>Haver</strong> (existir)</td><td>Sempre singular</td><td>"Havia muitas pessoas ali."</td></tr>
+          <tr><td><strong>Fazer</strong> (tempo)</td><td>Sempre singular</td><td>"Faz dois anos que não vejo."</td></tr>
+          <tr><td><strong>Existir/Ocorrer</strong></td><td>Concorda com sujeito</td><td>"Existem vários problemas."</td></tr>
+        </table>
+        <h4>Pronomes de tratamento</h4>
+        <p>Vossa Excelência, Vossa Senhoria, Vossa Magnificência — verbo na 3ª pessoa: <em>"Vossa Excelência <strong>assinou</strong> o documento."</em></p>
+        <h4>Sujeito coletivo</h4>
+        <p>Verbo no singular: <em>"A multidão <strong>correu</strong> em disparada."</em> Se especificado o coletivo: pode ir a plural: <em>"A maioria dos servidores <strong>aprovaram</strong> a proposta."</em> (particularizante)</p>
+
+        <h3>Concordância Nominal</h3>
+        <p>Adjetivo concorda em gênero e número com o substantivo que modifica.</p>
+        <h4>Adjetivo com dois ou mais substantivos:</h4>
+        <ul>
+          <li>Adjetivo após os substantivos de gêneros diferentes → masculino plural: <em>"Camisa e calça <strong>novos</strong>"</em></li>
+          <li>Adjetivo antes dos substantivos → concorda com o mais próximo: <em>"<strong>Nova</strong> camisa e calça"</em></li>
+          <li>Adjetivo após substantivos do mesmo gênero → pode ficar no singular: <em>"Pai e filho <strong>dedicado</strong>"</em></li>
+        </ul>
+        <div class="acc-check">
+          <input type="checkbox" id="ck-pt-3" onchange="marcarTopico('pt-3','portugues',this)">
+          <label for="ck-pt-3">✅ Li e entendi este tópico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Regência -->
+  <div class="acc-item">
+    <button class="acc-btn" data-topic="pt-4" onclick="toggleAcc(this)">
+      <span>↔️ 4. Regência Verbal e Nominal</span><span class="acc-seta">▼</span>
+    </button>
+    <div class="acc-content">
+      <div class="c">
+        <h3>Verbos com regência diferente do esperado</h3>
+        <table>
+          <tr><th>Verbo</th><th>Preposição</th><th>Exemplo correto</th></tr>
+          <tr><td>Assistir (ver)</td><td>A</td><td>"Assistiu <strong>ao</strong> filme"</td></tr>
+          <tr><td>Assistir (ajudar)</td><td>sem prep.</td><td>"O médico assistiu o paciente"</td></tr>
+          <tr><td>Visar (ter objetivo)</td><td>A</td><td>"Visa <strong>à</strong> qualidade"</td></tr>
+          <tr><td>Visar (assinar)</td><td>sem prep.</td><td>"Visou o documento"</td></tr>
+          <tr><td>Obedecer/Desobedecer</td><td>A</td><td>"Obedeceu <strong>ao</strong> regulamento"</td></tr>
+          <tr><td>Preferir</td><td>A … a</td><td>"Prefiro café <strong>a</strong> chá"</td></tr>
+          <tr><td>Implicar (acarretar)</td><td>em</td><td>"Implica <strong>em</strong> responsabilidade"</td></tr>
+          <tr><td>Ir / Vir</td><td>A / De</td><td>"Vou <strong>a</strong> São Paulo" / "Venho <strong>de</strong> casa"</td></tr>
+          <tr><td>Namorar</td><td>sem prep.</td><td>"Namora Maria" (não "com")</td></tr>
+        </table>
+        <h3>Regência Nominal</h3>
+        <table>
+          <tr><th>Nome</th><th>Preposição</th><th>Exemplo</th></tr>
+          <tr><td>Apto</td><td>A/Para</td><td>"Apto <strong>ao</strong> trabalho"</td></tr>
+          <tr><td>Compatível</td><td>Com</td><td>"Compatível <strong>com</strong> o cargo"</td></tr>
+          <tr><td>Necessidade</td><td>De</td><td>"Necessidade <strong>de</strong> treinamento"</td></tr>
+          <tr><td>Diferente</td><td>De</td><td>"Diferente <strong>de</strong> outros"</td></tr>
+          <tr><td>Satisfeito</td><td>Com</td><td>"Satisfeito <strong>com</strong> o resultado"</td></tr>
+        </table>
+        <div class="acc-check">
+          <input type="checkbox" id="ck-pt-4" onchange="marcarTopico('pt-4','portugues',this)">
+          <label for="ck-pt-4">✅ Li e entendi este tópico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Morfologia -->
+  <div class="acc-item">
+    <button class="acc-btn" data-topic="pt-5" onclick="toggleAcc(this)">
+      <span>🔤 5. Morfologia — Classes de Palavras</span><span class="acc-seta">▼</span>
+    </button>
+    <div class="acc-content">
+      <div class="c">
+        <h3>As 10 Classes de Palavras</h3>
+        <table>
+          <tr><th>Classe</th><th>O que é</th><th>Exemplo</th></tr>
+          <tr><td>Substantivo</td><td>Nomeia seres, coisas, lugares</td><td>servidor, escola, Brasil</td></tr>
+          <tr><td>Adjetivo</td><td>Caracteriza o substantivo</td><td>eficiente, público, novo</td></tr>
+          <tr><td>Verbo</td><td>Ação, estado ou fenômeno</td><td>trabalhar, ser, chover</td></tr>
+          <tr><td>Advérbio</td><td>Modifica verbo, adjetivo ou outro advérbio</td><td>rapidamente, muito, bem</td></tr>
+          <tr><td>Pronome</td><td>Substitui ou acompanha o substantivo</td><td>eu, ele, este, meu, que</td></tr>
+          <tr><td>Artigo</td><td>Determina o substantivo</td><td>o, a, os, as, um, uma</td></tr>
+          <tr><td>Numeral</td><td>Indica quantidade ou ordem</td><td>dois, primeiro, dobro</td></tr>
+          <tr><td>Preposição</td><td>Liga palavras</td><td>de, em, para, com, a</td></tr>
+          <tr><td>Conjunção</td><td>Liga orações</td><td>e, mas, porque, que, logo</td></tr>
+          <tr><td>Interjeição</td><td>Exprime emoção</td><td>Ah! Uau! Oba! Ei!</td></tr>
+        </table>
+        <h3>Pronomes — O que mais cai</h3>
+        <h4>Pronomes Relativos</h4>
+        <ul>
+          <li><strong>que:</strong> mais usado, refere-se a pessoa ou coisa</li>
+          <li><strong>quem:</strong> só para pessoas, após preposição</li>
+          <li><strong>cujo(a):</strong> indica posse (de quem / do qual); não admite artigo depois: <em>"o aluno cujo caderno..."</em></li>
+          <li><strong>onde:</strong> lugar; <strong>quando:</strong> tempo; <strong>como:</strong> modo; <strong>quanto:</strong> quantidade</li>
+          <li><strong>o qual / a qual / os quais:</strong> mais formais, evitam ambiguidade</li>
+        </ul>
+        <h4>Colocação Pronominal</h4>
+        <ul>
+          <li><strong>Próclise</strong> (antes): com palavra atrativa — não, nunca, jamais, sempre, já, muito, pronomes relativos, subordinativas: <em>"Não <strong>me</strong> diga!"</em></li>
+          <li><strong>Ênclise</strong> (depois): início de frase, após pausa, com verbos no imperativo afirmativo: <em>"Diga-<strong>me</strong>."</em></li>
+          <li><strong>Mesóclise</strong> (meio): com futuro do presente e futuro do pretérito: <em>"Dir-<strong>lhe</strong>-ei a verdade."</em></li>
+        </ul>
+        <div class="acc-check">
+          <input type="checkbox" id="ck-pt-5" onchange="marcarTopico('pt-5','portugues',this)">
+          <label for="ck-pt-5">✅ Li e entendi este tópico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mapa Português -->
+  <div class="mapa">
+    <div class="mapa-tit">🧠 Mapa Mental — Língua Portuguesa</div>
+    <div class="mapa-center">LÍNGUA PORTUGUESA · 10 questões</div>
+    <div class="mapa-grid">
+      <div class="mapa-ramo"><div class="mapa-rtit">📖 Interpretação (6-7 q)</div><ul><li>Tema/tese central</li><li>Inferências implícitas</li><li>Conectivos lógicos</li><li>Tipologia textual</li><li>Vocabulário contextual</li></ul></div>
+      <div class="mapa-ramo"><div class="mapa-rtit">✏️ Ortografia (1-2 q)</div><ul><li>Acentuação (oxítona/parox/propar)</li><li>Crase (quando usar/não usar)</li><li>Por que/porque/porquê</li><li>Hífen pós-reforma</li></ul></div>
+      <div class="mapa-ramo"><div class="mapa-rtit">🔗 Concordância (1-2 q)</div><ul><li>Verbal: impessoais (haver, fazer)</li><li>Nominal: adjetivo+substantivo</li><li>Sujeito composto antes/depois</li></ul></div>
+      <div class="mapa-ramo"><div class="mapa-rtit">↔️ Regência + Morfologia</div><ul><li>Assistir A / Visar A</li><li>Preferir A … a B</li><li>Pronomes relativos (cujo!)</li><li>Colocação pronominal</li></ul></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== INFORMÁTICA ========== -->
+<div id="informatica" class="secao">
+  <div class="card">
+    <div class="ctit"><div class="cico">💻</div> Noções de Informática <span class="badge bi">5 questões · 10 pts</span></div>
+    <div class="c"><p>Mínimo: 2 questões certas (40%). A banca FSADU costuma focar em Windows, Office e Internet. Estude com atenção os atalhos e fórmulas.</p></div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-btn" data-topic="inf-1" onclick="toggleAcc(this)">
+      <span>🪟 1. Windows 10/11 — Sistema Operacional <span class="badge bq">COBRADO</span></span><span class="acc-seta">▼</span>
+    </button>
+    <div class="acc-content">
+      <div class="c">
+        <h3>Conceitos Fundamentais</h3>
+        <ul>
+          <li><strong>Sistema Operacional:</strong> software que gerencia hardware e permite execução de programas. Windows é o mais cobrado em concursos.</li>
+          <li><strong>Área de Trabalho (Desktop):</strong> tela inicial; contém ícones, barra de tarefas e bandeja do sistema (canto inferior direito)</li>
+          <li><strong>Explorador de Arquivos (Windows Explorer):</strong> gerencia arquivos e pastas. Atalho: <code>Win + E</code></li>
+          <li><strong>Pasta ≠ Arquivo:</strong> pasta = diretório (container), arquivo tem extensão (ex: .docx)</li>
+          <li><strong>Caminho (Path):</strong> localização de um arquivo, ex: <code>C:\Usuários\Maria\Documentos\relatório.docx</code></li>
+        </ul>
+        <h3>Extensões de Arquivo — As mais cobradas</h3>
+        <div class="g2">
+          <ul>
+            <li><code>.docx</code> — Word (documento)</li>
+            <li><code>.xlsx</code> — Excel (planilha)</li>
+            <li><code>.pptx</code> — PowerPoint (apresentação)</li>
+            <li><code>.pdf</code> — Portable Document Format</li>
+            <li><code>.txt</code> — texto simples</li>
+          </ul>
+          <ul>
+            <li><code>.jpg/.jpeg/.png/.gif</code> — imagem</li>
+            <li><code>.mp3/.wav</code> — áudio</li>
+            <li><code>.mp4/.avi</code> — vídeo</li>
+            <li><code>.exe</code> — programa executável</li>
+            <li><code>.zip/.rar</code> — arquivo compactado</li>
+          </ul>
+        </div>
+        <h3>Atalhos de Teclado — Os mais cobrados</h3>
+        <table>
+          <tr><th>Atalho</th><th>Função</th></tr>
+          <tr><td><code>Ctrl + C</code></td><td>Copiar</td></tr>
+          <tr><td><code>Ctrl + X</code></td><td>Recortar</td></tr>
+          <tr><td><code>Ctrl + V</code></td><td>Colar</td></tr>
+          <tr><td><code>Ctrl + Z</code></td><td>Desfazer</td></tr>
+          <tr><td><code>Ctrl + Y</code></td><td>Refazer</td></tr>
+          <tr><td><code>Ctrl + A</code></td><td>Selecionar tudo</td></tr>
+          <tr><td><code>Alt + F4</code></td><td>Fechar janela/programa</td></tr>
+          <tr><td><code>Win + D</code></td><td>Mostrar/ocultar área de trabalho</td></tr>
+          <tr><td><code>Win + E</code></td><td>Explorador de Arquivos</td></tr>
+          <tr><td><code>Win + L</code></td><td>Bloquear computador</td></tr>
+          <tr><td><code>Print Screen</code></td><td>Captura toda a tela</td></tr>
+          <tr><td><code>Alt + Print Screen</code></td><td>Captura apenas a janela ativa</td></tr>
+          <tr><td><code>Ctrl + Alt + Del</code></td><td>Abre opções de segurança / gerenciador</td></tr>
+          <tr><td><code>Shift + Delete</code></td><td>Exclui sem passar pela lixeira</td></tr>
+        </table>
+        <h3>Lixeira</h3>
+        <ul>
+          <li>Arquivos excluídos com Delete ficam na Lixeira (podem ser recuperados)</li>
+          <li>Shift+Delete: exclui permanentemente (sem Lixeira)</li>
+          <li>Esvaziar Lixeira: exclui permanentemente todos os arquivos</li>
+          <li>Lixeira ocupa espaço no HD enquanto não esvaziada</li>
+        </ul>
+        <div class="acc-check">
+          <input type="checkbox" id="ck-inf-1" onchange="marcarTopico('inf-1','informatica',this)">
+          <label for="ck-inf-1">✅ Li e entendi este tópico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-btn" data-topic="inf-2" onclick="toggleAcc(this)">
+      <span>📄 2. Microsoft Word e Excel <span class="badge bq">COBRADO</span></span><span class="acc-seta">▼</span>
+    </button>
+    <div class="acc-content">
+      <div class="c">
+        <h3>Microsoft Word</h3>
+        <h4>Atalhos essenciais</h4>
+        <table>
+          <tr><th>Atalho</th><th>Função</th></tr>
+          <tr><td><code>Ctrl + N</code></td><td>Novo documento</td></tr>
+          <tr><td><code>Ctrl + O</code></td><td>Abrir documento</td></tr>
+          <tr><td><code>Ctrl + S</code></td><td>Salvar</td></tr>
+          <tr><td><code>F12</code></td><td>Salvar Como</td></tr>
+          <tr><td><code>Ctrl + P</code></td><td>Imprimir</td></tr>
+          <tr><td><code>Ctrl + B</code></td><td>Negrito (Bold)</td></tr>
+          <tr><td><code>Ctrl + I</code></td><td>Itálico (Italic)</td></tr>
+          <tr><td><code>Ctrl + U</code></td><td>Sublinhado (Underline)</td></tr>
+          <tr><td><code>Ctrl + F</code></td><td>Localizar texto</td></tr>
+          <tr><td><code>Ctrl + H</code></td><td>Substituir texto</td></tr>
+          <tr><td><code>Ctrl + Enter</code></td><td>Inserir quebra de página</td></tr>
+        </table>
+        <h4>Conceitos importantes</h4>
+        <ul>
+          <li>Parágrafo novo: <code>Enter</code> | Quebra de linha sem parágrafo: <code>Shift+Enter</code></li>
+          <li>Modos de exibição: Layout de Impressão, Leitura, Web, Rascunho</li>
+          <li>Marcadores: lista com símbolos | Numeração: lista ordenada</li>
+          <li>Tabulação: alinha texto. Recuo: distância da margem</li>
+          <li>Cabeçalho/Rodapé: áreas de informação fixas no topo/base da página</li>
+        </ul>
+
+        <h3>Microsoft Excel</h3>
+        <h4>Conceitos básicos</h4>
+        <ul>
+          <li>Célula = interseção de coluna (letra) + linha (número): <code>A1</code>, <code>B3</code>, <code>C10</code></li>
+          <li>Intervalo: conjunto de células: <code>A1:A10</code> (A1 até A10), <code>A1:C5</code> (bloco)</li>
+          <li>Toda fórmula começa com <code>=</code></li>
+          <li>Planilha = Sheet | Pasta de trabalho = Arquivo Excel (.xlsx)</li>
+        </ul>
+        <h4>Fórmulas essenciais</h4>
+        <table>
+          <tr><th>Fórmula</th><th>O que faz</th><th>Exemplo</th></tr>
+          <tr><td><code>=SOMA(A1:A10)</code></td><td>Soma um intervalo</td><td>Soma de A1 a A10</td></tr>
+          <tr><td><code>=MÉDIA(B1:B5)</code></td><td>Média aritmética</td><td>Média de B1 a B5</td></tr>
+          <tr><td><code>=MÁXIMO(C1:C20)</code></td><td>Maior valor</td><td>Maior valor em C1:C20</td></tr>
+          <tr><td><code>=MÍNIMO(D1:D10)</code></td><td>Menor valor</td><td>—</td></tr>
+          <tr><td><code>=CONT.NÚM(A:A)</code></td><td>Conta células com número</td><td>—</td></tr>
+          <tr><td><code>=CONT.VALORES(A:A)</code></td><td>Conta células não vazias</td><td>—</td></tr>
+          <tr><td><code>=SE(A1>10;"Sim";"Não")</code></td><td>Condição SE</td><td>Se A1 > 10 retorna "Sim"</td></tr>
+          <tr><td><code>=PROCV(B1;A:C;2;0)</code></td><td>Procura vertical</td><td>Busca valor na coluna A e retorna col 2</td></tr>
+        </table>
+        <h4>Referência de células</h4>
+        <ul>
+          <li><strong>Relativa:</strong> <code>A1</code> — muda ao copiar/mover a fórmula</li>
+          <li><strong>Absoluta:</strong> <code>$A$1</code> — não muda ao copiar (fixada)</li>
+          <li><strong>Mista:</strong> <code>$A1</code> (coluna fixa) ou <code>A$1</code> (linha fixa)</li>
+        </ul>
+        <div class="dica">💡 Para travar referência use <code>F4</code> com o cursor sobre a célula: A1 → $A$1 → A$1 → $A1 → A1</div>
+        <div class="acc-check">
+          <input type="checkbox" id="ck-inf-2" onchange="marcarTopico('inf-2','informatica',this)">
+          <label for="ck-inf-2">✅ Li e entendi este tópico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-btn" data-topic="inf-3" onclick="toggleAcc(this)">
+      <span>🌐 3. Internet, E-mail e Redes</span><span class="acc-seta">▼</span>
+    </button>
+    <div class="acc-content">
+      <div class="c">
+        <h3>Conceitos de Internet</h3>
+        <ul>
+          <li><strong>URL:</strong> endereço de um recurso na web (ex: https://www.ufma.br/pagina)</li>
+          <li><strong>HTTP:</strong> protocolo de transferência de hipertexto — sem criptografia</li>
+          <li><strong>HTTPS:</strong> HTTP + SSL/TLS = versão segura (exibe cadeado na barra)</li>
+          <li><strong>IP:</strong> endereço numérico único de cada dispositivo na rede</li>
+          <li><strong>DNS:</strong> converte nomes de sites em endereços IP</li>
+          <li><strong>Navegadores:</strong> Chrome, Firefox, Edge, Safari (software para acessar a web)</li>
+        </ul>
+        <h3>Atalhos de Navegador</h3>
+        <table>
+          <tr><th>Atalho</th><th>Ação</th></tr>
+          <tr><td><code>Ctrl + T</code></td><td>Nova aba</td></tr>
+          <tr><td><code>Ctrl + W</code></td><td>Fechar aba</td></tr>
+          <tr><td><code>Ctrl + L</code></td><td>Focar barra de endereço</td></tr>
+          <tr><td><code>F5 / Ctrl+R</code></td><td>Atualizar página</td></tr>
+          <tr><td><code>Ctrl+Shift+Del</code></td><td>Limpar histórico/cookies/cache</td></tr>
+          <tr><td><code>F11</code></td><td>Tela cheia</td></tr>
+        </table>
+        <h3>E-mail — Conceitos essenciais</h3>
+        <table>
+          <tr><th>Campo</th><th>Significado</th></tr>
+          <tr><td><strong>Para</strong></td><td>Destinatário(s) principal(ais)</td></tr>
+          <tr><td><strong>CC</strong> (Com Cópia)</td><td>Recebem cópia visível a todos</td></tr>
+          <tr><td><strong>CCo / BCC</strong> (Cópia Oculta)</td><td>Recebem cópia invisível aos demais</td></tr>
+          <tr><td><strong>Assunto</strong></td><td>Tema do e-mail (campo obrigatório)</td></tr>
+          <tr><td><strong>Responder</strong></td><td>Responde apenas ao remetente</td></tr>
+          <tr><td><strong>Responder a todos</strong></td><td>Responde a todos os destinatários</td></tr>
+          <tr><td><strong>Encaminhar</strong></td><td>Redireciona o e-mail para outro(s)</td></tr>
+        </table>
+        <h3>Cookies, Cache e Histórico</h3>
+        <ul>
+          <li><strong>Cookies:</strong> pequenos arquivos que guardam preferências e sessões do usuário</li>
+          <li><strong>Cache:</strong> armazena temporariamente páginas/imagens para carregamento mais rápido</li>
+          <li><strong>Histórico:</strong> registro de sites visitados</li>
+          <li><strong>Modo Anônimo (Incógnito):</strong> não salva histórico, cookies nem cache localmente</li>
+        </ul>
+        <div class="acc-check">
+          <input type="checkbox" id="ck-inf-3" onchange="marcarTopico('inf-3','informatica',this)">
+          <label for="ck-inf-3">✅ Li e entendi este tópico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-btn" data-topic="inf-4" onclick="toggleAcc(this)">
+      <span>🔒 4. Segurança da Informação <span class="badge bm">COBRADO</span></span><span class="acc-seta">▼</span>
+    </button>
+    <div class="acc-content">
+      <div class="c">
+        <h3>Tipos de Ameaças (Malwares)</h3>
+        <table>
+          <tr><th>Nome</th><th>Como age</th></tr>
+          <tr><td><strong>Vírus</strong></td><td>Parasita arquivos, se replica ao executar um programa infectado</td></tr>
+          <tr><td><strong>Worm</strong></td><td>Se propaga automaticamente pela rede, sem necessidade de intervenção humana</td></tr>
+          <tr><td><strong>Trojan (Cavalo de Troia)</strong></td><td>Parece legítimo, mas abre porta para invasores</td></tr>
+          <tr><td><strong>Ransomware</strong></td><td>Criptografa os arquivos e exige resgate (bitcoin)</td></tr>
+          <tr><td><strong>Spyware</strong></td><td>Espiona o usuário, rouba informações sem ele perceber</td></tr>
+          <tr><td><strong>Adware</strong></td><td>Exibe anúncios não solicitados</td></tr>
+          <tr><td><strong>Keylogger</strong></td><td>Registra tudo que o usuário digita (senhas, etc.)</td></tr>
+          <tr><td><strong>Rootkit</strong></td><td>Oculta a presença de malware no sistema</td></tr>
+        </table>
+        <h3>Golpes Virtuais</h3>
+        <ul>
+          <li><strong>Phishing:</strong> e-mail/site falso que imita um legítimo para roubar dados. Ex: e-mail falso do banco pedindo senha</li>
+          <li><strong>Pharming:</strong> redireciona o DNS para site falso mesmo digitando o endereço correto</li>
+          <li><strong>Engenharia Social:</strong> manipular pessoas para obter informações sigilosas</li>
+        </ul>
+        <h3>Ferramentas de Proteção</h3>
+        <ul>
+          <li><strong>Antivírus:</strong> detecta, bloqueia e remove malwares</li>
+          <li><strong>Firewall:</strong> barreira que filtra o tráfego de rede (hardware ou software)</li>
+          <li><strong>Backup:</strong> cópia de segurança dos dados. Regra 3-2-1: 3 cópias, 2 mídias diferentes, 1 fora do local</li>
+          <li><strong>VPN:</strong> rede privada virtual — criptografa conexão em redes públicas</li>
+          <li><strong>Autenticação de dois fatores (2FA):</strong> além da senha, exige um segundo fator (SMS, app)</li>
+        </ul>
+        <h3>Boas Práticas de Segurança</h3>
+        <ul>
+          <li>Senha forte: mínimo 8 caracteres, maiúsculas + minúsculas + números + símbolos</li>
+          <li>Nunca usar a mesma senha em vários sites</li>
+          <li>Não clicar em links suspeitos em e-mails</li>
+          <li>Manter sistema e antivírus atualizados</li>
+          <li>Desconfiar de ofertas "boas demais para ser verdade"</li>
+        </ul>
+        <div class="acc-check">
+          <input type="checkbox" id="ck-inf-4" onchange="marcarTopico('inf-4','informatica',this)">
+          <label for="ck-inf-4">✅ Li e entendi este tópico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mapa">
+    <div class="mapa-tit">🧠 Mapa Mental — Informática</div>
+    <div class="mapa-center">NOÇÕES DE INFORMÁTICA · 5 questões (mín. 2 certas)</div>
+    <div class="mapa-grid">
+      <div class="mapa-ramo"><div class="mapa-rtit">🪟 Windows</div><ul><li>Atalhos Ctrl+C/X/V/Z</li><li>Extensões: .docx/.xlsx/.pdf</li><li>Lixeira: Delete vs Shift+Del</li><li>Win+E / Win+L / Win+D</li></ul></div>
+      <div class="mapa-ramo"><div class="mapa-rtit">📄 Office</div><ul><li>Word: Ctrl+B/I/U/F/H</li><li>Excel: fórmulas com =</li><li>SOMA, MÉDIA, SE, PROCV</li><li>Ref. absoluta: $A$1 (F4)</li></ul></div>
+      <div class="mapa-ramo"><div class="mapa-rtit">🌐 Internet</div><ul><li>HTTP vs HTTPS (cadeado)</li><li>E-mail: Para/CC/CCo</li><li>Cookies/Cache</li><li>Atalhos do navegador</li></ul></div>
+      <div class="mapa-ramo"><div class="mapa-rtit">🔒 Segurança</div><ul><li>Vírus/Worm/Ransomware</li><li>Phishing: e-mail falso</li><li>Antivírus + Firewall</li><li>Backup 3-2-1</li></ul></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== LEGISLAÇÃO ========== -->
+<div id="legislacao" class="secao">
+  <div class="card">
+    <div class="ctit"><div class="cico">⚖️</div> Legislação e Normas <span class="badge bq">10 questões · 20 pts · MAIS ELIMINATÓRIA</span></div>
+    <div class="c">
+      <p>Esta matéria reprova mais candidatos! A banca cobra <strong>literalidade da lei</strong>. Estude os artigos exatos, prazos e percentuais. Não interprete — decore!</p>
+      <div class="destaque">📌 <strong>Leis mais cobradas:</strong> Lei 8.112/90 · Lei 11.091/2005 · CF/88 Art.37 · Decreto 1.171/94 · Lei 9.784/99 · Lei 8.429/92 · Lei 12.527/2011 · Lei 13.709/2018</div>
+    </div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-btn" data-topic="leg-1" onclick="toggleAcc(this)">
+      <span>📜 1. Lei 8.112/90 — Estatuto do Servidor Federal <span class="badge bq">MAIS COBRADO</span></span><span class="acc-seta">▼</span>
+    </button>
+    <div class="acc-content">
+      <div class="c">
+        <h3>Formas de Provimento (Art. 8º) — TODAS as 9</h3>
+        <table>
+          <tr><th>Forma</th><th>Definição</th><th>Detalhe</th></tr>
+          <tr><td><strong>Nomeação</strong></td><td>Forma originária; única para cargo efetivo após concurso</td><td>Também para cargos em comissão</td></tr>
+          <tr><td><strong>Promoção</strong></td><td>Elevação a cargo de nível mais alto na carreira</td><td>Dentro do mesmo quadro</td></tr>
+          <tr><td><strong>Readaptação</strong></td><td>Investidura em cargo compatível com limitação física/mental superveniente</td><td>Sem redução de remuneração</td></tr>
+          <tr><td><strong>Reversão</strong></td><td>Retorno do servidor aposentado</td><td>Por invalidez cessada (ex officio) ou a pedido</td></tr>
+          <tr><td><strong>Aproveitamento</strong></td><td>Retorno do servidor em disponibilidade</td><td>Cargo de atribuições compatíveis</td></tr>
+          <tr><td><strong>Reintegração</strong></td><td>Retorno do servidor demitido ilegalmente</td><td>Por decisão judicial; ocupa o cargo de origem</td></tr>
+          <tr><td><strong>Recondução</strong></td><td>Retorno ao cargo anterior</td><td>Reprovado em estágio probatório ou desocupação pela reintegração</td></tr>
+          <tr><td><strong>Transferência</strong></td><td>EXTINTA pela Lei 9.527/97</td><td>Não existe mais!</td></tr>
+          <tr><td><strong>Ascensão</strong></td><td>EXTINTA pelo STF</td><td>Viola o concurso público</td></tr>
+        </table>
+        <div class="atencao">🔴 Transferência e Ascensão foram extintas! Se aparecerem como opção em questão, estão ERRADAS.</div>
+
+        <h3>Requisitos para Posse (Art. 5º)</h3>
+        <ol class="nl">
+          <li>Ser brasileiro ou estrangeiro na forma da lei</li>
+          <li>Ter 18 anos mínimos completos (exceto cargo de aprendiz)</li>
+          <li>Estar em gozo pleno dos direitos políticos</li>
+          <li>Estar em dia com obrigações militares e eleitorais</li>
+          <li>Ter escolaridade/habilitação exigidas para o cargo</li>
+          <li>Ter aptidão física e mental</li>
+          <li>Não registrar antecedentes criminais incompatíveis com o exercício do cargo</li>
+        </ol>
+
+        <h3>Prazos da Posse e Exercício</h3>
+        <ul>
+          <li>Posse deve ocorrer em até <strong>30 dias</strong> após a publicação da nomeação</li>
+          <li>Não tomando posse: nomeação sem efeito</li>
+          <li>Entrada em exercício: até <strong>15 dias</strong> após a posse</li>
+          <li>Não entrando em exercício: exonerado</li>
+        </ul>
+
+        <h3>Estágio Probatório e Estabilidade</h3>
+        <ul>
+          <li>Estágio probatório: <strong>3 anos</strong> (36 meses) de efetivo exercício</li>
+          <li>Avaliação em: <strong>assiduidade, disciplina, capacidade de iniciativa, produtividade e responsabilidade</strong></li>
+          <li>Reprovado no estágio: exonerado (se não for estável) ou reconduzido ao cargo anterior (se já era estável por outro cargo)</li>
+          <li>Estabilidade: adquirida após <strong>3 anos</strong> de efetivo exercício no cargo efetivo</li>
+          <li>Perda da estabilidade: sentença judicial transitada em julgado + PAD + avaliação periódica de desempenho insuficiente (art. 41 CF)</li>
+        </ul>
+
+        <h3>Licenças — Principais (com prazos)</h3>
+        <table>
+          <tr><th>Licença</th><th>Prazo</th><th>Com remuneração?</th></tr>
+          <tr><td>Licença à gestante</td><td>120 dias (prorrogável +60 dias = 180)</td><td>Sim</td></tr>
+          <tr><td>Licença à adotante</td><td>90 dias (criança até 1 ano); 30 dias (acima)</td><td>Sim</td></tr>
+          <tr><td>Licença paternidade</td><td>5 dias (prorrogável +15 dias = 20)</td><td>Sim</td></tr>
+          <tr><td>Licença para tratamento de saúde</td><td>Até 24 meses; acima de 30 dias contínuos = perda do cargo em comissão</td><td>Sim (até 120 dias), depois avaliada</td></tr>
+          <tr><td>Licença por acidente em serviço</td><td>Sem prazo definido</td><td>Sim, total</td></tr>
+          <tr><td>Licença para capacitação</td><td>Até 3 meses a cada 5 anos</td><td>Sim</td></tr>
+          <tr><td>Licença p/ mandato classista (sindical)</td><td>Duração do mandato</td><td>Não (sem ônus)</td></tr>
+          <tr><td>Licença para acompanhar cônjuge</td><td>Sem prazo definido</td><td>Não (sem ônus)</td></tr>
+          <tr><td>Licença para atividade política</td><td>Até 3 meses antes da eleição</td><td>Não</td></tr>
+          <tr><td>Licença para trato de interesses particulares</td><td>Até 3 anos</td><td>Não</td></tr>
+        </table>
+
+        <h3>Férias (Art. 77–80)</h3>
+        <ul>
+          <li>Duração: <strong>30 dias corridos</strong> por período aquisitivo (12 meses de exercício)</li>
+          <li>Remuneração: salário + <strong>1/3</strong> adicional (constitucional)</li>
+          <li>Podem ser parceladas em até <strong>3 etapas</strong> (a critério do servidor)</li>
+          <li>Interrompidas: por convocação por necessidade do serviço (o servidor recebe os dias proporcionais)</li>
+          <li>Convertidas em abono pecuniário: até 10 dias por período aquisitivo</li>
+        </ul>
+
+        <h3>Penalidades Disciplinares (Art. 127)</h3>
+        <table>
+          <tr><th>Penalidade</th><th>Infrações típicas</th><th>Prescrição</th></tr>
+          <tr><td><strong>Advertência</strong></td><td>Falta leve; pode ser oral ou por escrito</td><td>2 anos</td></tr>
+          <tr><td><strong>Suspensão</strong></td><td>Até 90 dias; reincidência em advertência; faltas médias</td><td>2 anos</td></tr>
+          <tr><td><strong>Demissão</strong></td><td>Crime contra a Adm., improbidade, abandono (+30 dias), inassiduidade (+60 dias)</td><td>5 anos</td></tr>
+          <tr><td><strong>Cassação de aposentadoria/disponibilidade</strong></td><td>Aposentado/disponível que praticaria demissão</td><td>5 anos</td></tr>
+          <tr><td><strong>Destituição de cargo em comissão</strong></td><td>Servidor comissionado sem cargo efetivo que praticaria demissão</td><td>5 anos</td></tr>
+        </table>
+        <div class="atencao">🔴 <strong>Abandono de cargo:</strong> ausência injustificada por mais de <strong>30 dias consecutivos</strong> → Demissão<br>
+        🔴 <strong>Inassiduidade habitual:</strong> mais de <strong>60 faltas interpoladas</strong> (não consecutivas) em 12 meses → Demissão</div>
+
+        <h3>Acumulação de Cargos (Art. 118 + CF Art. 37, XVI)</h3>
+        <p>É vedada a acumulação remunerada de cargos públicos, <strong>exceto</strong> quando houver compatibilidade de horários e nos seguintes casos:</p>
+        <ul>
+          <li>2 cargos de <strong>professor</strong></li>
+          <li>1 cargo de <strong>professor</strong> + 1 cargo técnico ou científico</li>
+          <li>2 cargos ou empregos privativos de <strong>profissionais de saúde</strong> com profissões regulamentadas</li>
+        </ul>
+
+        <h3>Remoção e Redistribuição</h3>
+        <ul>
+          <li><strong>Remoção:</strong> deslocamento do servidor dentro do mesmo quadro, com ou sem mudança de sede</li>
+          <li>A pedido do servidor: independe de interesse da administração</li>
+          <li>Ex officio: por necessidade do serviço</li>
+          <li><strong>Redistribuição:</strong> deslocamento do cargo (não do servidor), mantendo o servidor no lugar</li>
+        </ul>
+        <div class="acc-check">
+          <input type="checkbox" id="ck-leg-1" onchange="marcarTopico('leg-1','legislacao',this)">
+          <label for="ck-leg-1">✅ Li e entendi este tópico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-btn" data-topic="leg-2" onclick="toggleAcc(this)">
+      <span>🏛️ 2. Constituição Federal — Art. 37 e Administração Pública <span class="badge bq">COBRADO</span></span><span class="acc-seta">▼</span>
+    </button>
+    <div class="acc-content">
+      <div class="c">
+        <h3>Os 5 Princípios Constitucionais — LIMPE</h3>
+        <table>
+          <tr><th>Princípio</th><th>Significado</th><th>Exemplo prático</th></tr>
+          <tr><td><strong>Legalidade</strong></td><td>A Adm. só pode fazer o que a lei permite (diferente do particular que pode tudo que a lei não proíbe)</td><td>Servidor não pode criar procedimento sem previsão legal</td></tr>
+          <tr><td><strong>Impessoalidade</strong></td><td>Proibição de favoritismos; atos em nome da Adm., não do agente</td><td>Vedado usar verbas públicas para autopromoção pessoal</td></tr>
+          <tr><td><strong>Moralidade</strong></td><td>Boa-fé, ética, probidade, honestidade</td><td>Ato pode ser legal e ainda imoral</td></tr>
+          <tr><td><strong>Publicidade</strong></td><td>Transparência; regra = publicar; exceção = sigilo</td><td>Publicação no DOU de atos administrativos</td></tr>
+          <tr><td><strong>Eficiência</strong></td><td>Melhor resultado com menor custo; incluído pela EC 19/1998</td><td>Racionalização dos processos internos</td></tr>
+        </table>
+
+        <h3>Concurso Público (Art. 37, II e III)</h3>
+        <ul>
+          <li>Obrigatório para cargos efetivos e empregos públicos</li>
+          <li>Cargos em comissão: livre nomeação e exoneração (confiança)</li>
+          <li>Validade do concurso: <strong>até 2 anos</strong>, prorrogável <strong>uma vez</strong> por igual período (total máximo: 4 anos)</li>
+          <li>Candidato aprovado tem mera expectativa de direito, não direito subjetivo à nomeação</li>
+          <li><strong>Exceção STF (Súmula 15):</strong> se houver vagas e prazo vigente, há direito à nomeação</li>
+        </ul>
+
+        <h3>Remuneração e Teto (Art. 37, XI)</h3>
+        <ul>
+          <li>Teto: subsídio dos Ministros do STF</li>
+          <li>Vedada equiparação/vinculação de vencimentos por qualquer motivo</li>
+          <li>Isonomia salarial não pode ser estabelecida por via judicial</li>
+        </ul>
+
+        <h3>Nepotismo — Súmula Vinculante 13</h3>
+        <ul>
+          <li>Vedada nomeação de cônjuge, companheiro ou parente em linha reta, colateral ou por afinidade até o 3º grau</li>
+          <li>Para cargos em comissão, função de confiança ou empregos na Administração Direta, Autarquias e Fundações</li>
+          <li>Exceção: cargos políticos (ministro, secretário) — não se aplica a SV 13</li>
+        </ul>
+        <div class="acc-check">
+          <input type="checkbox" id="ck-leg-2" onchange="marcarTopico('leg-2','legislacao',this)">
+          <label for="ck-leg-2">✅ Li e entendi este tópico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-btn" data-topic="leg-3" onclick="toggleAcc(this)">
+      <span>🤝 3. Código de Ética — Decreto 1.171/1994 <span class="badge bq">COBRADO</span></span><span class="acc-seta">▼</span>
+    </button>
+    <div class="acc-content">
+      <div class="c">
+        <h3>Deveres do Servidor (Seção I, XIV)</h3>
+        <ol class="nl">
+          <li>Desempenhar suas atribuições com eficiência e presteza</li>
+          <li>Ser leal às instituições a que servir</li>
+          <li>Ser probo, reto, leal e justo, denunciando irregularidades</li>
+          <li>Agir com urbanidade (educação/respeito) nas relações</li>
+          <li>Guardar sigilo sobre assunto da repartição</li>
+          <li>Ter respeito à hierarquia, mas denunciar irregularidades superiores</li>
+          <li>Resistir a pressões de superiores para atos ilegais</li>
+          <li>Comunicar à chefia todo ato ou fato contrário ao interesse público</li>
+          <li>Dar andamento a requerimentos com a devida celeridade</li>
+          <li>Ter consciência de que o trabalho é uma realização do bem comum</li>
+        </ol>
+
+        <h3>Vedações ao Servidor (Seção II, XV)</h3>
+        <ol class="nl">
+          <li>Usar o cargo para obter vantagem pessoal ou para terceiros</li>
+          <li>Prejudicar deliberadamente a reputação de outros servidores</li>
+          <li>Usar materiais ou recursos públicos para fins particulares</li>
+          <li>Ceder a pressões ou ameaças para praticar atos ilegais</li>
+          <li>Fazer uso de informações privilegiadas obtidas pelo cargo</li>
+          <li>Apresentar-se embriagado ou sob efeito de substâncias</li>
+          <li>Praticar ato visando fim diverso do interesse público</li>
+          <li>Fazer proselitismo político no ambiente de trabalho</li>
+          <li>Pleitear, negociar ou intermediar interesses privados</li>
+          <li>Receber presentes de quem tenha interesse em decisão administrativa</li>
+        </ol>
+
+        <div class="destaque">⭐ <strong>Comissão de Ética:</strong> existe em todos os órgãos/entidades. Aplica censura ética (não punição administrativa). A punição administrativa é do PAD.</div>
+        <div class="acc-check">
+          <input type="checkbox" id="ck-leg-3" onchange="marcarTopico('leg-3','legislacao',this)">
+          <label for="ck-leg-3">✅ Li e entendi este tópico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-btn" data-topic="leg-4" onclick="toggleAcc(this)">
+      <span>📋 4. Lei 9.784/1999 — Processo Administrativo Federal</span><span class="acc-seta">▼</span>
+    </button>
+    <div class="acc-content">
+      <div class="c">
+        <h3>Princípios do PAF (Art. 2º)</h3>
+        <p>Legalidade · Finalidade · Motivação · Razoabilidade · Proporcionalidade · Moralidade · Ampla Defesa · Contraditório · Segurança Jurídica · Interesse Público · Eficiência</p>
+        <div class="destaque">💡 <strong>Diferença:</strong> CF/88 tem 5 princípios (LIMPE). Lei 9.784 tem 11 princípios (inclui motivação, razoabilidade, proporcionalidade, contraditório, ampla defesa, etc.)</div>
+
+        <h3>Prazos Principais (Art. 24–49)</h3>
+        <table>
+          <tr><th>Ato</th><th>Prazo</th></tr>
+          <tr><td>Intimação do interessado</td><td>No mínimo 3 dias úteis de antecedência</td></tr>
+          <tr><td>Manifestação do interessado</td><td>5 dias (prorrogável por igual período)</td></tr>
+          <tr><td>Interposição de recurso</td><td><strong>10 dias</strong> da ciência/publicação</td></tr>
+          <tr><td>Decisão da autoridade sobre recurso</td><td><strong>30 dias</strong> (prorrogável + 30 com justificativa)</td></tr>
+          <tr><td>Prazo para decidir o processo</td><td>Princípio da celeridade (razoável)</td></tr>
+          <tr><td>Anulação de ato com efeito favorável</td><td><strong>5 anos</strong> (decadência administrativa)</td></tr>
+        </table>
+
+        <h3>Recursos no PAF</h3>
+        <ul>
+          <li>Prazo: <strong>10 dias</strong> contados da ciência ou publicação</li>
+          <li>Efeito: devolutivo (pode ter suspensivo se autoridade motivar)</li>
+          <li>Instâncias recursais: até <strong>3 instâncias</strong> administrativas (salvo previsão diversa)</li>
+          <li>Reformatio in pejus: pode piorar a situação do recorrente (atenção!)</li>
+        </ul>
+
+        <h3>Direitos dos Administrados (Art. 3º)</h3>
+        <ul>
+          <li>Ser tratado com respeito pelas autoridades</li>
+          <li>Ter ciência da tramitação e obter vista dos autos</li>
+          <li>Formular alegações e apresentar documentos</li>
+          <li>Fazer-se assistir por advogado (facultativo)</li>
+          <li>Ter processos concluídos em prazo razoável</li>
+        </ul>
+        <div class="acc-check">
+          <input type="checkbox" id="ck-leg-4" onchange="marcarTopico('leg-4','legislacao',this)">
+          <label for="ck-leg-4">✅ Li e entendi este tópico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-btn" data-topic="leg-5" onclick="toggleAcc(this)">
+      <span>🔍 5. Lei 12.527/2011 — LAI + Lei 13.709/2018 — LGPD</span><span class="acc-seta">▼</span>
+    </button>
+    <div class="acc-content">
+      <div class="c">
+        <h3>Lei de Acesso à Informação (LAI)</h3>
+        <ul>
+          <li><strong>Regra:</strong> publicidade | <strong>Exceção:</strong> sigilo</li>
+          <li>Qualquer pessoa pode solicitar informação pública, <strong>sem precisar justificar</strong></li>
+          <li>SIC (Serviço de Informação ao Cidadão): obrigatório em todos os órgãos</li>
+          <li>Prazo resposta: imediata ou em até <strong>20 dias</strong> (prorrogável + 10 dias com justificativa)</li>
+        </ul>
+        <h4>Classificação do Sigilo</h4>
+        <table>
+          <tr><th>Nível</th><th>Prazo máximo</th><th>Quem classifica</th></tr>
+          <tr><td>Ultrassecreta</td><td>25 anos (prorrogável uma vez)</td><td>Presidente, Vice, Ministros, Comandantes militares, Chefes de missão diplomática</td></tr>
+          <tr><td>Secreta</td><td>15 anos</td><td>Os acima + titulares de autarquias, fundações, empresas públicas</td></tr>
+          <tr><td>Reservada</td><td>5 anos</td><td>Autoridades que classificam secreta + outras autoridades</td></tr>
+        </table>
+        <div class="atencao">🔴 Informações pessoais têm acesso restrito por <strong>100 anos</strong> (art. 31)! Diferente do sigilo por razão de Estado.</div>
+
+        <h3>LGPD — Lei Geral de Proteção de Dados (Lei 13.709/2018)</h3>
+        <ul>
+          <li>Protege dados pessoais de pessoas físicas (naturais)</li>
+          <li><strong>Dado pessoal:</strong> qualquer informação que identifique ou possa identificar uma pessoa</li>
+          <li><strong>Dado sensível:</strong> origem racial/étnica, religião, saúde, vida sexual, dado biométrico, opinião política, filiação sindical</li>
+          <li><strong>ANPD:</strong> Autoridade Nacional de Proteção de Dados — órgão fiscalizador</li>
+          <li>Titulares têm direito de: acesso, correção, exclusão, portabilidade, revogação do consentimento</li>
+          <li>Bases legais do tratamento: consentimento, cumprimento de obrigação legal, execução de políticas públicas, proteção da vida, tutela da saúde, interesse legítimo, proteção do crédito</li>
+        </ul>
+        <div class="acc-check">
+          <input type="checkbox" id="ck-leg-5" onchange="marcarTopico('leg-5','legislacao',this)">
+          <label for="ck-leg-5">✅ Li e entendi este tópico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-btn" data-topic="leg-6" onclick="toggleAcc(this)">
+      <span>🎓 6. Lei 11.091/2005 — Plano de Carreira TAE</span><span class="acc-seta">▼</span>
+    </button>
+    <div class="acc-content">
+      <div class="c">
+        <h3>Estrutura da Carreira</h3>
+        <ul>
+          <li>5 níveis de classificação: <strong>A, B, C, D e E</strong> (A = mais simples; E = superior)</li>
+          <li><strong>Assistente em Administração = Nível D</strong> (exige ensino médio)</li>
+          <li>Cada nível tem: 4 níveis de capacitação e 16 padrões de vencimento</li>
+        </ul>
+        <h3>Progressão por Mérito Profissional</h3>
+        <ul>
+          <li>Mudança de padrão de vencimento dentro do mesmo nível de classificação</li>
+          <li>A cada <strong>2 anos</strong> de efetivo exercício</li>
+          <li>Exige resultado positivo em <strong>avaliação de desempenho</strong></li>
+        </ul>
+        <h3>Progressão por Capacitação Profissional</h3>
+        <ul>
+          <li>Mudança de nível de capacitação dentro do nível de classificação</li>
+          <li>Exige participação em ação de capacitação compatível com o cargo</li>
+          <li>Conforme carga horária estabelecida nos anexos da lei</li>
+        </ul>
+        <h3>Incentivo à Qualificação</h3>
+        <ul>
+          <li>Pago quando o servidor possui escolaridade ACIMA da exigida para o cargo</li>
+          <li>Percentuais sobre o vencimento básico:</li>
+        </ul>
+        <table>
+          <tr><th>Nível de educação acima do exigido</th><th>% sobre vencimento básico</th></tr>
+          <tr><td>Ensino médio (para quem exige fundamental)</td><td>10%</td></tr>
+          <tr><td>Ensino médio profissionalizante ou técnico</td><td>15%</td></tr>
+          <tr><td>Ensino superior (graduação)</td><td>20%</td></tr>
+          <tr><td>Especialização (mínimo 360h)</td><td>25%</td></tr>
+          <tr><td>Mestrado</td><td>52%</td></tr>
+          <tr><td>Doutorado</td><td>75%</td></tr>
+        </table>
+        <div class="dica">💡 Como Assistente em Adm. é cargo Nível D (médio), se você tem graduação em Administração, tem direito a <strong>20% de incentivo à qualificação</strong>!</div>
+        <div class="acc-check">
+          <input type="checkbox" id="ck-leg-6" onchange="marcarTopico('leg-6','legislacao',this)">
+          <label for="ck-leg-6">✅ Li e entendi este tópico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mapa">
+    <div class="mapa-tit">🧠 Mapa Mental — Legislação e Normas</div>
+    <div class="mapa-center">LEGISLAÇÃO E NORMAS · 10 questões · matéria mais eliminatória</div>
+    <div class="mapa-grid">
+      <div class="mapa-ramo"><div class="mapa-rtit">📜 Lei 8.112/90</div><ul><li>Provimento: 7 formas válidas</li><li>Posse: 30 dias | Exercício: 15 dias</li><li>Estágio: 3 anos (assiduidade etc.)</li><li>Férias: 30 dias + 1/3 adicional</li><li>Abandono: +30 dias / Inassiduidade: +60</li><li>Penalidades: 5 tipos</li></ul></div>
+      <div class="mapa-ramo"><div class="mapa-rtit">🏛️ CF/88 Art. 37</div><ul><li>LIMPE (5 princípios)</li><li>Concurso: até 2+2 anos</li><li>Teto: subsídio Ministro STF</li><li>Nepotismo: SV 13 (3º grau)</li><li>Acumulação: professor+prof; prof+técnico; saúde+saúde</li></ul></div>
+      <div class="mapa-ramo"><div class="mapa-rtit">🤝 Ética + PAF</div><ul><li>Dec.1171: deveres e vedações</li><li>Comissão de Ética: censura</li><li>PAF: recurso em 10 dias</li><li>Decisão em recurso: 30 dias</li><li>Decadência: 5 anos</li></ul></div>
+      <div class="mapa-ramo"><div class="mapa-rtit">📋 LAI + LGPD + TAE</div><ul><li>LAI: prazo 20 dias</li><li>Ultrassecreta: 25 anos</li><li>LGPD: dado sensível/ANPD</li><li>TAE: Nível D = Assist. Adm.</li><li>Incentivo qualif.: 20% graduação</li></ul></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== ESPECÍFICOS ========== -->
+<div id="especificos" class="secao">
+  <div class="card">
+    <div class="ctit"><div class="cico">🏢</div> Conhecimentos Específicos <span class="badge bq">30 questões · 50 pts · DECISIVO</span></div>
+    <div class="c"><p>É a maior parte da prova! Como administradora, você já domina muito deste conteúdo. Reforce os pontos teóricos cobrados pela FSADU.</p></div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-btn" data-topic="esp-1" onclick="toggleAcc(this)">
+      <span>📁 1. Gestão de Documentos e Arquivística <span class="badge bq">MUITO COBRADO</span></span><span class="acc-seta">▼</span>
+    </button>
+    <div class="acc-content">
+      <div class="c">
+        <h3>Ciclo Vital dos Documentos — Lei 8.159/1991</h3>
+        <table>
+          <tr><th>Fase</th><th>Arquivo</th><th>Características</th><th>Passagem</th></tr>
+          <tr><td>1ª Idade</td><td><strong>Corrente</strong></td><td>Uso frequente, consulta constante, próximo ao usuário</td><td>→ Transferência →</td></tr>
+          <tr><td>2ª Idade</td><td><strong>Intermediário</strong></td><td>Pouco uso, aguarda prazos da tabela de temporalidade</td><td>→ Recolhimento →</td></tr>
+          <tr><td>3ª Idade</td><td><strong>Permanente</strong></td><td>Guarda definitiva, valor histórico, probatório ou informativo</td><td>— definitivo —</td></tr>
+        </table>
+        <div class="atencao">🔴 Corrente → Intermediário = <strong>TRANSFERÊNCIA</strong> | Intermediário → Permanente = <strong>RECOLHIMENTO</strong>. Não confunda!</div>
+
+        <h3>Espécies e Gêneros Documentais</h3>
+        <ul>
+          <li><strong>Espécie:</strong> define o tipo jurídico-administrativo (decreto, portaria, ofício, ata, relatório)</li>
+          <li><strong>Gênero:</strong> define o suporte (textual, iconográfico, cartográfico, audiovisual, digital)</li>
+          <li><strong>Tipo:</strong> espécie + atividade que gerou. Ex: "ata de reunião de diretoria"</li>
+        </ul>
+
+        <h3>Classificação dos Arquivos</h3>
+        <div class="g2">
+          <div>
+            <h4>Por entidade produtora</h4>
+            <ul><li>Público: órgão governamental</li><li>Privado: pessoa física/jurídica privada</li><li>Semipúblico: entidades paraestatais</li></ul>
+            <h4>Por extensão de sua atuação</h4>
+            <ul><li>Setorial: dentro de um setor</li><li>Central: da organização toda</li></ul>
+          </div>
+          <div>
+            <h4>Por grau de sigilo</h4>
+            <ul><li>Ostensivo: acesso livre</li><li>Sigiloso: acesso restrito</li></ul>
+            <h4>Por estágio de evolução</h4>
+            <ul><li>Corrente, intermediário, permanente</li></ul>
+          </div>
+        </div>
+
+        <h3>Métodos de Arquivamento</h3>
+        <table>
+          <tr><th>Método</th><th>Como funciona</th><th>Uso recomendado</th></tr>
+          <tr><td><strong>Alfabético</strong></td><td>Por nome em ordem A-Z</td><td>Quando o nome é o fator principal. Regra: sobrenome 1º</td></tr>
+          <tr><td><strong>Numérico simples</strong></td><td>Por número atribuído</td><td>Processos, prontuários. Exige índice alfabético auxiliar</td></tr>
+          <tr><td><strong>Numérico cronológico</strong></td><td>Número + data</td><td>Documentos com data importante</td></tr>
+          <tr><td><strong>Cronológico</strong></td><td>Por data (ano/mês/dia)</td><td>Extratos bancários, publicações</td></tr>
+          <tr><td><strong>Geográfico</strong></td><td>Por local (país/estado/cidade)</td><td>Correspondência por regiões</td></tr>
+          <tr><td><strong>Temático/Assunto</strong></td><td>Por tema ou assunto</td><td>Coletâneas, dossiês</td></tr>
+          <tr><td><strong>Alfanumérico</strong></td><td>Combinação de letras e números</td><td>Almoxarifado, inventário</td></tr>
+        </table>
+
+        <h3>Arquivamento Alfabético — Regras Práticas</h3>
+        <ul>
+          <li>Sobrenome vem primeiro: <em>Silva, João →</em> SILVA JOÃO</li>
+          <li>Sobrenomes com "de, da, dos, das, e": o artigo/preposição vai após o nome: <em>Souza, Maria de →</em> SOUZA MARIA DE</li>
+          <li>Nomes com Júnior/Filho/Neto/Sobrinho: fazem parte do sobrenome: <em>LIRA JUNIOR, Carlos</em></li>
+          <li>Títulos (Dr., Prof., Gen.): desconsiderados na ordenação: <em>Dr. Pedro Silva →</em> SILVA PEDRO (DR.)</li>
+          <li>Nomes estrangeiros: última palavra é o sobrenome: <em>Charles Brown →</em> BROWN CHARLES</li>
+          <li>Nomes com São, Santa, Santo: considerados como parte do sobrenome: <em>Santa Rosa →</em> SANTA ROSA</li>
+        </ul>
+
+        <h3>Tabela de Temporalidade</h3>
+        <ul>
+          <li>Instrumento que determina o prazo de guarda de cada tipo de documento</li>
+          <li>Aprovada pela autoridade competente do órgão</li>
+          <li>Definições: guarda temporária (com prazo) ou guarda permanente</li>
+          <li>Destinação final: <strong>eliminação</strong> (documentos sem valor) ou <strong>recolhimento ao permanente</strong></li>
+          <li>Eliminar documento público: exige registro (listagem de eliminação) e publicação em DOU</li>
+        </ul>
+        <div class="acc-check">
+          <input type="checkbox" id="ck-esp-1" onchange="marcarTopico('esp-1','especificos',this)">
+          <label for="ck-esp-1">✅ Li e entendi este tópico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-btn" data-topic="esp-2" onclick="toggleAcc(this)">
+      <span>📨 2. Redação Oficial e Correspondência Administrativa <span class="badge bq">COBRADO</span></span><span class="acc-seta">▼</span>
+    </button>
+    <div class="acc-content">
+      <div class="c">
+        <h3>Princípios da Redação Oficial (Manual da Presidência — 4ª ed.)</h3>
+        <ul>
+          <li><strong>Clareza:</strong> texto inteligível, sem ambiguidades</li>
+          <li><strong>Precisão:</strong> cada palavra tem um sentido exato; evitar polissemia</li>
+          <li><strong>Concisão:</strong> sem palavras desnecessárias, repetições ou excessos</li>
+          <li><strong>Coesão e coerência:</strong> ideias encadeadas logicamente</li>
+          <li><strong>Formalidade e padronização:</strong> linguagem culta, tratamento uniforme</li>
+          <li><strong>Impessoalidade:</strong> o texto representa o órgão, não o indivíduo</li>
+        </ul>
+
+        <h3>Tipos de Documentos Oficiais</h3>
+        <table>
+          <tr><th>Documento</th><th>Uso</th><th>Detalhe</th></tr>
+          <tr><td><strong>Ofício</strong></td><td>Comunicação EXTERNA entre órgãos ou ao público</td><td>Padrão Ofício (4ª ed.) unificou ofício e memorando</td></tr>
+          <tr><td><strong>Memorando</strong></td><td>Comunicação INTERNA entre setores/unidades</td><td>Atualmente incorporado ao Padrão Ofício</td></tr>
+          <tr><td><strong>Circular</strong></td><td>Um remetente → vários destinatários (mesmo assunto)</td><td>Internamente mais comum</td></tr>
+          <tr><td><strong>Portaria</strong></td><td>Ato normativo interno de ministros/chefes</td><td>Regula assuntos internos do órgão</td></tr>
+          <tr><td><strong>Decreto</strong></td><td>Ato normativo do Presidente, governador ou prefeito</td><td>Decreto-lei: poder executivo legisla</td></tr>
+          <tr><td><strong>Resolução</strong></td><td>Ato normativo de colegiados</td><td>ANPD, CNAS, etc.</td></tr>
+          <tr><td><strong>Ata</strong></td><td>Registra assuntos tratados em reunião</td><td>Deve ser aprovada pelos presentes</td></tr>
+          <tr><td><strong>Relatório</strong></td><td>Exposição de fatos/atividades com análise</td><td>Subscrição e data obrigatórias</td></tr>
+          <tr><td><strong>Requerimento</strong></td><td>Pedido formal de cidadão à Administração</td><td>Petição simples; protocolada no SIC</td></tr>
+          <tr><td><strong>Atestado</strong></td><td>Confirma situação de fato</td><td>Certidão: extrai dados de livros/registros</td></tr>
+        </table>
+
+        <h3>Formatação do Padrão Ofício (4ª ed.)</h3>
+        <ul>
+          <li><strong>Cabeçalho:</strong> brasão, nome do órgão, identificação do setor</li>
+          <li><strong>Identificação do expediente:</strong> tipo + número + ano + sigla do órgão</li>
+          <li><strong>Data:</strong> local e data por extenso</li>
+          <li><strong>Destinatário:</strong> <em>A Sua Excelência o Senhor</em> / nome / cargo / órgão / endereço</li>
+          <li><strong>Vocativo:</strong> por cargo (não nome): "Senhor Diretor," / "Senhor Reitor,"</li>
+          <li><strong>Corpo do texto:</strong> introdução, desenvolvimento e conclusão</li>
+          <li><strong>Fecho:</strong> "Respeitosamente," (para superiores) | "Atenciosamente," (para iguais/inferiores)</li>
+          <li><strong>Identificação do signatário:</strong> nome + cargo/função</li>
+        </ul>
+        <div class="dica">💡 O Padrão Ofício (4ª ed.) eliminou os fechos antigos como "Mui respeitosamente", "Penhoradamente" etc. Hoje só existem DOIS fechos válidos.</div>
+        <div class="acc-check">
+          <input type="checkbox" id="ck-esp-2" onchange="marcarTopico('esp-2','especificos',this)">
+          <label for="ck-esp-2">✅ Li e entendi este tópico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-btn" data-topic="esp-3" onclick="toggleAcc(this)">
+      <span>📊 3. Administração Geral — Funções e Planejamento <span class="badge bq">COBRADO</span></span><span class="acc-seta">▼</span>
+    </button>
+    <div class="acc-content">
+      <div class="c">
+        <h3>As 4 Funções Administrativas — PODC</h3>
+        <table>
+          <tr><th>Função</th><th>O que é</th><th>Ferramentas/Exemplos</th></tr>
+          <tr><td><strong>Planejamento</strong></td><td>Definir objetivos, metas e como alcançá-los. Primeiro a ser executado</td><td>SWOT, Plano estratégico, metas SMART, PPA</td></tr>
+          <tr><td><strong>Organização</strong></td><td>Estruturar recursos (humanos, financeiros, materiais) e alocar responsabilidades</td><td>Organograma, manual de funções, departamentalização</td></tr>
+          <tr><td><strong>Direção / Liderança</strong></td><td>Coordenar, motivar, liderar e orientar pessoas para atingir os objetivos</td><td>Comunicação, delegação, liderança situacional</td></tr>
+          <tr><td><strong>Controle</strong></td><td>Monitorar resultados, comparar com o planejado e corrigir desvios</td><td>Indicadores, auditorias, relatórios de desempenho</td></tr>
+        </table>
+
+        <h3>Tipos de Planejamento</h3>
+        <div class="g2">
+          <div>
+            <h4>Estratégico</h4>
+            <ul><li>Longo prazo (+5 anos)</li><li>Alta cúpula diretiva</li><li>Envolve toda a organização</li><li>Define missão, visão, valores</li></ul>
+            <h4>Tático</h4>
+            <ul><li>Médio prazo (1-5 anos)</li><li>Nível gerencial (gerentes)</li><li>Abrange departamentos</li><li>Interpreta e executa o estratégico</li></ul>
+          </div>
+          <div>
+            <h4>Operacional</h4>
+            <ul><li>Curto prazo (&lt;1 ano)</li><li>Supervisores/chefias operacionais</li><li>Tarefas rotineiras do dia a dia</li><li>Procedimentos detalhados</li></ul>
+            <h4>Análise SWOT/FOFA</h4>
+            <ul><li>S/F = Forças (internas positivas)</li><li>W/O = Fraquezas (internas negativas)</li><li>O/O = Oportunidades (externas positivas)</li><li>T/A = Ameaças (externas negativas)</li></ul>
+          </div>
+        </div>
+
+        <h3>Estruturas Organizacionais</h3>
+        <table>
+          <tr><th>Estrutura</th><th>Características</th><th>Vantagens</th></tr>
+          <tr><td><strong>Linear/hierárquica</strong></td><td>Autoridade única, cadeia escalar clara, comando centralizado</td><td>Simples, clara, disciplinada</td></tr>
+          <tr><td><strong>Funcional</strong></td><td>Especialização por função; vários chefes especializados</td><td>Alta especialização</td></tr>
+          <tr><td><strong>Linha-Staff</strong></td><td>Combina linear com assessoria (staff) especializada</td><td>Expertise + comando claro</td></tr>
+          <tr><td><strong>Matricial</strong></td><td>Dois chefes: funcional + projeto. Viola unidade de comando</td><td>Flexibilidade em projetos</td></tr>
+          <tr><td><strong>Por projeto</strong></td><td>Criada para projeto específico; desfeita após conclusão</td><td>Foco no resultado</td></tr>
+          <tr><td><strong>Rede</strong></td><td>Organizações conectadas por terceirização</td><td>Flexibilidade máxima</td></tr>
+        </table>
+        <div class="acc-check">
+          <input type="checkbox" id="ck-esp-3" onchange="marcarTopico('esp-3','especificos',this)">
+          <label for="ck-esp-3">✅ Li e entendi este tópico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-btn" data-topic="esp-4" onclick="toggleAcc(this)">
+      <span>👥 4. Gestão de Pessoas e Teorias Motivacionais <span class="badge bm">COBRADO</span></span><span class="acc-seta">▼</span>
+    </button>
+    <div class="acc-content">
+      <div class="c">
+        <h3>Subsistemas de Gestão de Pessoas</h3>
+        <table>
+          <tr><th>Subsistema</th><th>O que compreende</th></tr>
+          <tr><td>Recrutamento</td><td>Atrair candidatos. Interno (de dentro) vs Externo (de fora)</td></tr>
+          <tr><td>Seleção</td><td>Escolher o mais adequado: testes, entrevistas, dinâmicas</td></tr>
+          <tr><td>Treinamento</td><td>Desenvolver habilidades para o cargo atual (curto prazo)</td></tr>
+          <tr><td>Desenvolvimento</td><td>Preparar para cargos/funções futuras (longo prazo)</td></tr>
+          <tr><td>Avaliação de Desempenho</td><td>Medir resultados do colaborador (360°, por competências, etc.)</td></tr>
+          <tr><td>Cargos e Salários</td><td>Estruturar remuneração conforme cargo e nível</td></tr>
+          <tr><td>Benefícios</td><td>Planos de saúde, transporte, refeição, etc.</td></tr>
+          <tr><td>Segurança no Trabalho</td><td>Prevenção de acidentes, NRs, CIPA</td></tr>
+        </table>
+
+        <h3>Principais Teorias Motivacionais</h3>
+        <h4>Maslow — Hierarquia das Necessidades</h4>
+        <ul>
+          <li>5 níveis (base ao topo): Fisiológicas → Segurança → Sociais/Amor → Estima → Autorrealização</li>
+          <li>Necessidade superior só motiva quando a inferior está satisfeita</li>
+          <li>Crítica: muito rígida, não explica todos os comportamentos</li>
+        </ul>
+        <div class="exemplo">🔺 Pirâmide: (base) Alimentação/sono → Emprego/segurança → Amizade/amor → Reconhecimento/status → Criatividade/potencial (topo)</div>
+
+        <h4>Herzberg — Teoria dos Dois Fatores</h4>
+        <ul>
+          <li><strong>Fatores Higiênicos</strong> (extrínsecos): evitam insatisfação, mas NÃO motivam — salário, condições físicas, supervisão, políticas da empresa, segurança</li>
+          <li><strong>Fatores Motivadores</strong> (intrínsecos): geram satisfação e motivação real — realização, reconhecimento, crescimento, responsabilidade, o trabalho em si</li>
+        </ul>
+        <div class="destaque">💡 Herzberg: melhorar fatores higiênicos remove insatisfação, mas não cria motivação. Para motivar, é preciso enriquecer o trabalho com fatores motivadores.</div>
+
+        <h4>McGregor — Teorias X e Y</h4>
+        <table>
+          <tr><th>Teoria X</th><th>Teoria Y</th></tr>
+          <tr><td>Trabalhador é preguiçoso por natureza</td><td>Trabalhador pode se autogerir e é criativo</td></tr>
+          <tr><td>Precisa ser controlado e punido</td><td>Aceita responsabilidades quando motivado</td></tr>
+          <tr><td>Foge do trabalho se puder</td><td>O trabalho é tão natural quanto o lazer</td></tr>
+          <tr><td>Gestão autoritária, centralizada</td><td>Gestão participativa, descentralizada</td></tr>
+        </table>
+
+        <h4>Vroom — Teoria da Expectativa</h4>
+        <p>Motivação = <strong>Expectativa × Instrumentalidade × Valência</strong></p>
+        <ul>
+          <li><strong>Expectativa:</strong> crença de que esforço leva ao resultado</li>
+          <li><strong>Instrumentalidade:</strong> crença de que resultado leva à recompensa</li>
+          <li><strong>Valência:</strong> valor que a pessoa atribui à recompensa</li>
+        </ul>
+
+        <h4>McClelland — Teoria das Necessidades Adquiridas</h4>
+        <ul>
+          <li><strong>Realização:</strong> deseja superar desafios, atingir metas</li>
+          <li><strong>Afiliação:</strong> valoriza relacionamentos, cooperação</li>
+          <li><strong>Poder:</strong> deseja influenciar e liderar pessoas</li>
+        </ul>
+
+        <h3>Clima e Cultura Organizacional</h3>
+        <ul>
+          <li><strong>Cultura:</strong> conjunto de valores, crenças, hábitos, ritos e símbolos compartilhados. É permanente e difícil de mudar. Criada historicamente</li>
+          <li><strong>Clima:</strong> percepção dos colaboradores sobre o ambiente de trabalho em determinado momento. É variável, pode mudar rapidamente</li>
+          <li><strong>Pesquisa de Clima:</strong> instrumento para medir a percepção dos servidores</li>
+        </ul>
+        <div class="acc-check">
+          <input type="checkbox" id="ck-esp-4" onchange="marcarTopico('esp-4','especificos',this)">
+          <label for="ck-esp-4">✅ Li e entendi este tópico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-btn" data-topic="esp-5" onclick="toggleAcc(this)">
+      <span>🛒 5. Licitações — Lei 14.133/2021 <span class="badge bq">QUENTE</span></span><span class="acc-seta">▼</span>
+    </button>
+    <div class="acc-content">
+      <div class="c">
+        <h3>Modalidades de Licitação (Lei 14.133/2021)</h3>
+        <table>
+          <tr><th>Modalidade</th><th>Quando usar</th><th>Critérios de julgamento</th></tr>
+          <tr><td><strong>Pregão</strong></td><td>Bens e serviços comuns (padrões objetivos)</td><td>Menor preço ou maior desconto</td></tr>
+          <tr><td><strong>Concorrência</strong></td><td>Contratos de maior complexidade ou valor</td><td>Vários critérios possíveis</td></tr>
+          <tr><td><strong>Concurso</strong></td><td>Trabalho técnico, científico ou artístico</td><td>Melhor técnica com prêmio ou remuneração</td></tr>
+          <tr><td><strong>Leilão</strong></td><td>Bens inservíveis ou apreendidos judicialmente</td><td>Maior lance</td></tr>
+          <tr><td><strong>Diálogo Competitivo</strong></td><td>Soluções inovadoras e complexas; novidade da lei</td><td>Melhor proposta após diálogos</td></tr>
+        </table>
+        <div class="atencao">❌ <strong>Extintas pela Lei 14.133/2021:</strong> Tomada de Preços e Convite (existiam na Lei 8.666/93). Se aparecerem como opção, ERRADAS!</div>
+
+        <h3>Dispensa e Inexigibilidade</h3>
+        <h4>Dispensa de licitação — quando a licitação seria possível, mas é dispensada</h4>
+        <ul>
+          <li>Obras/serviços de engenharia: até <strong>R$ 100.000</strong></li>
+          <li>Outros serviços e compras: até <strong>R$ 50.000</strong></li>
+          <li>Emergência ou calamidade pública</li>
+          <li>Remanescente de obra/serviço após rescisão contratual</li>
+          <li>Aquisição de gêneros perecíveis</li>
+          <li>Compra de material de uso das forças armadas</li>
+        </ul>
+        <h4>Inexigibilidade — quando a competição é inviável</h4>
+        <ul>
+          <li>Produtor, empresa ou representante exclusivo</li>
+          <li>Serviços técnicos de natureza singular (advogado específico, parecerista)</li>
+          <li>Profissionais de notória especialização</li>
+          <li>Artistas consagrados pela crítica</li>
+        </ul>
+
+        <h3>Critérios de Julgamento das Propostas</h3>
+        <ul>
+          <li>Menor preço</li>
+          <li>Maior desconto</li>
+          <li>Melhor técnica ou conteúdo artístico</li>
+          <li>Técnica e preço</li>
+          <li>Maior lance (leilão)</li>
+          <li>Maior retorno econômico</li>
+        </ul>
+
+        <h3>Princípios da Licitação</h3>
+        <p>Legalidade · Isonomia · Impessoalidade · Moralidade · Publicidade · Eficiência · Julgamento objetivo · Vinculação ao instrumento convocatório · Competitividade · Transparência · Desenvolvimento nacional sustentável · Probidade administrativa · Segregação de funções · Motivação</p>
+        <div class="acc-check">
+          <input type="checkbox" id="ck-esp-5" onchange="marcarTopico('esp-5','especificos',this)">
+          <label for="ck-esp-5">✅ Li e entendi este tópico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-btn" data-topic="esp-6" onclick="toggleAcc(this)">
+      <span>🔄 6. Gestão por Processos, Qualidade e Indicadores <span class="badge bm">COBRADO</span></span><span class="acc-seta">▼</span>
+    </button>
+    <div class="acc-content">
+      <div class="c">
+        <h3>Ciclo PDCA</h3>
+        <table>
+          <tr><th>Fase</th><th>Atividades</th></tr>
+          <tr><td><strong>Plan (Planejar)</strong></td><td>Identificar o problema, analisar causas, definir meta e plano de ação</td></tr>
+          <tr><td><strong>Do (Executar)</strong></td><td>Treinar, executar o plano de ação, coletar dados</td></tr>
+          <tr><td><strong>Check (Verificar)</strong></td><td>Verificar resultado; comparar dados com a meta; analisar efeitos</td></tr>
+          <tr><td><strong>Act (Agir/Padronizar)</strong></td><td>Padronizar (se atingiu meta) ou reiniciar PDCA (se não atingiu)</td></tr>
+        </table>
+
+        <h3>Ferramentas da Qualidade</h3>
+        <table>
+          <tr><th>Ferramenta</th><th>Para que serve</th></tr>
+          <tr><td><strong>Diagrama de Ishikawa (Espinha de Peixe / Causa-Efeito)</strong></td><td>Identificar causas de um problema. Categorias 6M: Método, Máquina, Material, Mão de obra, Meio ambiente, Medição</td></tr>
+          <tr><td><strong>5 Por Quês (5 Whys)</strong></td><td>Repetir "por quê?" até encontrar a causa raiz (geralmente 5 vezes)</td></tr>
+          <tr><td><strong>Diagrama de Pareto</strong></td><td>80% dos problemas têm 20% das causas. Prioriza o que atacar primeiro</td></tr>
+          <tr><td><strong>Fluxograma</strong></td><td>Representação gráfica de processos com símbolos padronizados</td></tr>
+          <tr><td><strong>Histograma</strong></td><td>Gráfico de barras que mostra distribuição de frequência</td></tr>
+          <tr><td><strong>Gráfico de Controle</strong></td><td>Monitora variação de processo ao longo do tempo</td></tr>
+          <tr><td><strong>Folha de Verificação</strong></td><td>Formulário para coleta sistemática de dados</td></tr>
+          <tr><td><strong>Diagrama de Dispersão</strong></td><td>Correlação entre duas variáveis</td></tr>
+          <tr><td><strong>5S</strong></td><td>Seiri (Utilização/Separar), Seiton (Organização/Ordenar), Seiso (Limpeza/Limpar), Seiketsu (Padronização/Saúde), Shitsuke (Autodisciplina/Sustentar)</td></tr>
+          <tr><td><strong>Benchmarking</strong></td><td>Comparar práticas com as melhores referências do mercado para melhorar</td></tr>
+        </table>
+
+        <h3>Indicadores de Desempenho</h3>
+        <table>
+          <tr><th>Indicador</th><th>O que mede</th><th>Exemplo</th></tr>
+          <tr><td><strong>Eficiência</strong></td><td>Relação resultado/recurso. "Fazer com menos"</td><td>Custo por aluno atendido</td></tr>
+          <tr><td><strong>Eficácia</strong></td><td>Atingir o objetivo. "Fazer a coisa certa"</td><td>Meta de vacinação atingida?</td></tr>
+          <tr><td><strong>Efetividade</strong></td><td>Impacto real no público-alvo. "Transformar"</td><td>Redução de doenças após vacinação</td></tr>
+          <tr><td><strong>Economicidade</strong></td><td>Menor custo possível sem perder qualidade</td><td>Compras com menor preço por licitação</td></tr>
+        </table>
+        <div class="destaque">🎯 Mnemônico: <strong>3 E's + E</strong> = Eficiência (meios) + Eficácia (resultados) + Efetividade (impacto) + Economicidade (custo)</div>
+        <div class="acc-check">
+          <input type="checkbox" id="ck-esp-6" onchange="marcarTopico('esp-6','especificos',this)">
+          <label for="ck-esp-6">✅ Li e entendi este tópico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-btn" data-topic="esp-7" onclick="toggleAcc(this)">
+      <span>📦 7. Gestão de Materiais, Patrimônio e Compras Públicas</span><span class="acc-seta">▼</span>
+    </button>
+    <div class="acc-content">
+      <div class="c">
+        <h3>Classificação de Materiais</h3>
+        <ul>
+          <li><strong>Material Permanente:</strong> duração superior a 2 anos, não perde suas características com o uso. Vira patrimônio. Ex: móveis, computadores, veículos</li>
+          <li><strong>Material de Consumo:</strong> uso imediato ou que se desgasta rapidamente. Ex: papel, caneta, cartucho, café</li>
+        </ul>
+        <div class="atencao">🔴 Critérios para classificar como consumo: Fragilidade, Perecibilidade, Incorporabilidade, Transformabilidade. Se não se enquadra = permanente.</div>
+
+        <h3>Gestão de Estoques</h3>
+        <table>
+          <tr><th>Método</th><th>Critério</th><th>Efeito no custo</th></tr>
+          <tr><td><strong>PEPS/FIFO</strong></td><td>Primeiro a entrar = primeiro a sair</td><td>Estoque avaliado a preços mais recentes</td></tr>
+          <tr><td><strong>UEPS/LIFO</strong></td><td>Último a entrar = primeiro a sair</td><td>Estoque a preços mais antigos</td></tr>
+          <tr><td><strong>Custo Médio</strong></td><td>Preço médio ponderado de todas as entradas</td><td>Preço intermediário entre PEPS e UEPS</td></tr>
+        </table>
+
+        <h3>Curva ABC (Análise de Pareto)</h3>
+        <table>
+          <tr><th>Classe</th><th>% dos itens</th><th>% do valor</th><th>Controle</th></tr>
+          <tr><td>A</td><td>~20%</td><td>~80%</td><td>Rigoroso, frequente</td></tr>
+          <tr><td>B</td><td>~30%</td><td>~15%</td><td>Médio</td></tr>
+          <tr><td>C</td><td>~50%</td><td>~5%</td><td>Simples, periódico</td></tr>
+        </table>
+
+        <h3>Almoxarifado e Patrimônio</h3>
+        <ul>
+          <li><strong>Almoxarifado:</strong> guarda, recebimento e distribuição de material de consumo</li>
+          <li>Controle: fichas de estoque (entrada/saída), inventário periódico (anual no mínimo)</li>
+          <li><strong>Tombamento:</strong> todo bem permanente recebe número de registro patrimonial</li>
+          <li><strong>Inventário patrimonial:</strong> levantamento físico dos bens; compara com registros contábeis</li>
+          <li><strong>Desfazimento:</strong> alienação (venda), doação, permuta, comodato, cessão de uso</li>
+          <li>Bens imóveis federais: controlados pelo SIAFI e registrados no SPIUnet</li>
+        </ul>
+        <div class="acc-check">
+          <input type="checkbox" id="ck-esp-7" onchange="marcarTopico('esp-7','especificos',this)">
+          <label for="ck-esp-7">✅ Li e entendi este tópico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="acc-item">
+    <button class="acc-btn" data-topic="esp-8" onclick="toggleAcc(this)">
+      <span>💰 8. Orçamento Público e Finanças</span><span class="acc-seta">▼</span>
+    </button>
+    <div class="acc-content">
+      <div class="c">
+        <h3>Instrumentos de Planejamento Orçamentário</h3>
+        <table>
+          <tr><th>Instrumento</th><th>Período</th><th>Função</th></tr>
+          <tr><td><strong>PPA</strong> (Plano Plurianual)</td><td>4 anos</td><td>Define diretrizes, objetivos e metas de médio prazo</td></tr>
+          <tr><td><strong>LDO</strong> (Lei de Diretrizes Orçamentárias)</td><td>1 ano</td><td>Define metas fiscais, prioridades e orienta a LOA</td></tr>
+          <tr><td><strong>LOA</strong> (Lei Orçamentária Anual)</td><td>1 ano</td><td>Fixa receitas e despesas para o exercício</td></tr>
+        </table>
+        <p>Hierarquia: <strong>PPA → LDO → LOA</strong>. A LOA deve ser compatível com a LDO e o PPA.</p>
+
+        <h3>Princípios Orçamentários</h3>
+        <ul>
+          <li><strong>Universalidade:</strong> toda receita e despesa deve estar incluída no orçamento</li>
+          <li><strong>Anualidade:</strong> vigência de 1 ano (1/1 a 31/12)</li>
+          <li><strong>Unidade:</strong> um único orçamento por ente federativo</li>
+          <li><strong>Exclusividade:</strong> LOA só trata de matéria orçamentária e financeira</li>
+          <li><strong>Equilíbrio:</strong> receita = despesa</li>
+          <li><strong>Legalidade:</strong> receitas e despesas dependem de autorização legal</li>
+          <li><strong>Publicidade:</strong> orçamento deve ser publicado</li>
+          <li><strong>Especificação:</strong> vedadas dotações globais; discriminar despesas</li>
+        </ul>
+
+        <h3>Estágios da Despesa Pública</h3>
+        <ol class="nl">
+          <li><strong>Fixação:</strong> previsão da despesa na LOA</li>
+          <li><strong>Empenho:</strong> reserva da dotação orçamentária (início do processo de execução)</li>
+          <li><strong>Liquidação:</strong> verificação do direito do credor (serviço prestado/bem entregue)</li>
+          <li><strong>Pagamento:</strong> efetivo desembolso do dinheiro ao credor</li>
+        </ol>
+        <div class="destaque">💡 Empenho = reserva (não é pagamento!). A nota de empenho é o documento que comprova a reserva da dotação. Sem empenho, não pode haver despesa.</div>
+        <div class="acc-check">
+          <input type="checkbox" id="ck-esp-8" onchange="marcarTopico('esp-8','especificos',this)">
+          <label for="ck-esp-8">✅ Li e entendi este tópico</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mapa">
+    <div class="mapa-tit">🧠 Mapa Mental — Conhecimentos Específicos</div>
+    <div class="mapa-center">CONHECIMENTOS ESPECÍFICOS · 30 questões · 50 pontos</div>
+    <div class="mapa-grid">
+      <div class="mapa-ramo"><div class="mapa-rtit">📁 Arquivística</div><ul><li>Corrente→Intermediário→Permanente</li><li>Transferência vs Recolhimento</li><li>Métodos: alfa/numérico/geo/temático</li><li>Tabela de temporalidade: eliminação ou permanente</li></ul></div>
+      <div class="mapa-ramo"><div class="mapa-rtit">📊 Adm. Geral</div><ul><li>PODC: 4 funções</li><li>Planejamento: estratégico/tático/operacional</li><li>SWOT: FOFA</li><li>Estruturas: linear/funcional/matricial</li></ul></div>
+      <div class="mapa-ramo"><div class="mapa-rtit">👥 Gestão de Pessoas</div><ul><li>Maslow: pirâmide 5 níveis</li><li>Herzberg: higiênicos ≠ motivadores</li><li>McGregor: X (coercitiva) vs Y (participativa)</li><li>Clima ≠ Cultura</li></ul></div>
+      <div class="mapa-ramo"><div class="mapa-rtit">🛒 Licitações</div><ul><li>Lei 14.133/2021: 5 modalidades</li><li>Pregão = bens comuns</li><li>Dispensa: até R$50k/R$100k</li><li>Inexigibilidade: exclusividade</li></ul></div>
+      <div class="mapa-ramo"><div class="mapa-rtit">🔄 Qualidade</div><ul><li>PDCA: Plan-Do-Check-Act</li><li>Ishikawa: 6M</li><li>5S: organização japonesa</li><li>3E's: eficiência/eficácia/efetividade</li></ul></div>
+      <div class="mapa-ramo"><div class="mapa-rtit">💰 Orçamento</div><ul><li>PPA→LDO→LOA</li><li>Despesa: empenho→liquidação→pagamento</li><li>Curva ABC: A=20%itens/80%valor</li><li>PEPS/UEPS/Custo Médio</li></ul></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== QUESTÕES ========== -->
+<div id="questoes" class="secao">
+  <div class="card">
+    <div class="ctit"><div class="cico">✏️</div> Simulado — Estilo FSADU/UFMA</div>
+    <div class="c"><p>Questões elaboradas no estilo da banca FSADU com base no edital e em provas anteriores de concursos da UFMA e concursos similares. Clique na opção para ver o gabarito.</p></div>
+  </div>
+  <div class="filtros">
+    <button class="fb ativo" onclick="filtQ('todas',this)">Todas (15)</button>
+    <button class="fb" onclick="filtQ('portugues',this)">📝 Português</button>
+    <button class="fb" onclick="filtQ('informatica',this)">💻 Informática</button>
+    <button class="fb" onclick="filtQ('legislacao',this)">⚖️ Legislação</button>
+    <button class="fb" onclick="filtQ('especificos',this)">🏢 Específicos</button>
+  </div>
+  <div id="q-score" class="q-score" style="display:none"></div>
+  <div id="ql"></div>
+</div>
+
+<!-- ========== FLASHCARDS ========== -->
+<div id="flashcards" class="secao">
+  <div class="card">
+    <div class="ctit"><div class="cico">🃏</div> Flashcards de Memorização</div>
+    <div class="c"><p>Clique no card para revelar a resposta. Marque "Lembrei!" para acompanhar seu progresso.</p></div>
+  </div>
+  <div class="filtros">
+    <button class="fb ativo" onclick="filtFC('todas',this)">Todas (20)</button>
+    <button class="fb" onclick="filtFC('legislacao',this)">⚖️ Legislação</button>
+    <button class="fb" onclick="filtFC('especificos',this)">🏢 Específicos</button>
+    <button class="fb" onclick="filtFC('geral',this)">📚 Geral</button>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <span style="font-size:11px;color:var(--txl)">Card <span id="fc-n">1</span> de <span id="fc-tot">1</span></span>
+      <span id="fc-area" class="badge bi">Área</span>
+    </div>
+    <div class="fc-wrap" onclick="flipCard()">
+      <div class="fc" id="FC">
+        <div class="fc-face fc-f"><div><div class="fc-txt" id="fc-p">—</div><div class="fc-hint">👆 Toque para ver a resposta</div></div></div>
+        <div class="fc-face fc-v"><div><div class="fc-txt" id="fc-r" style="color:var(--tx);font-size:13px">—</div><div class="fc-hint" style="color:var(--txl)">Sabia? Marque abaixo ↓</div></div></div>
+      </div>
+    </div>
+    <div class="fc-nav">
+      <button class="btn bout" onclick="navFC(-1)">← Anterior</button>
+      <button class="btn bvd" onclick="lembreiFC()">✓ Lembrei!</button>
+      <button class="btn bout" onclick="navFC(1)">Próximo →</button>
+    </div>
+    <div style="margin-top:12px">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--txl);margin-bottom:4px">
+        <span>Progresso nos flashcards</span>
+        <span id="fc-prog-txt">0 lembrados</span>
+      </div>
+      <div class="mini-rail"><div class="mini-fill" id="fc-bar" style="width:0%;background:var(--vd)"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PLANO ========== -->
+<div id="plano" class="secao">
+  <div class="card">
+    <div class="ctit"><div class="cico">📅</div> Plano de Estudos — 47 dias até a prova</div>
+    <div class="c">
+      <p>Prova: <strong>26/04/2026 às 14h</strong>. A partir de 10/03, são 47 dias. Marque cada dia concluído ✓ para acompanhar seu progresso.</p>
+      <div class="destaque">🎯 Meta: 2-3h/dia útil · Revisão nos fins de semana · Nunca estude no dia anterior (descanse!)</div>
+    </div>
+  </div>
+  <div id="plan-list"></div>
+
+  <div class="card" style="margin-top:14px">
+    <div class="ctit"><div class="cico">🗓️</div> Cronograma Oficial do Edital</div>
+    <div class="tl">
+      <div class="tl-item pass"><div class="tl-data">02/03/2026</div><div class="tl-ev">Publicação no DOU</div></div>
+      <div class="tl-item pass"><div class="tl-data">04/03 – 06/03/2026</div><div class="tl-ev">Solicitação de Isenção</div><div class="tl-desc">CadÚnico ou doador de medula</div></div>
+      <div class="tl-item hj"><div class="tl-data">04/03 – 30/03/2026</div><div class="tl-ev">🟡 INSCRIÇÕES ABERTAS</div><div class="tl-desc">fsaduconcursos.org.br · Taxa: R$100 · Apenas boleto!</div></div>
+      <div class="tl-item"><div class="tl-data">04/03 – 31/03/2026</div><div class="tl-ev">Pagamento do Boleto</div><div class="tl-desc">⚠️ Apenas boleto bancário — PIX e depósito NÃO são aceitos!</div></div>
+      <div class="tl-item"><div class="tl-data">até 07/04/2026</div><div class="tl-ev">Inscrições Deferidas/Indeferidas</div></div>
+      <div class="tl-item"><div class="tl-data">até 20/04/2026</div><div class="tl-ev">Documento de Confirmação de Inscrição</div><div class="tl-desc">Local da prova informado aqui — verifique!</div></div>
+      <div class="tl-item prova"><div class="tl-data">26/04/2026 — 14h00</div><div class="tl-ev">🔴 PROVA OBJETIVA — NÍVEL MÉDIO</div><div class="tl-desc">São Luís–MA · 55 questões · 4 horas · Caneta azul/preta transparente · Chegue 1h antes!</div></div>
+      <div class="tl-item"><div class="tl-data">até 27/04/2026</div><div class="tl-ev">Gabarito Preliminar</div></div>
+      <div class="tl-item"><div class="tl-data">28-29/04/2026</div><div class="tl-ev">Recursos contra o Gabarito</div></div>
+      <div class="tl-item"><div class="tl-data">até 13/05/2026</div><div class="tl-ev">Resultado da Prova + Gabarito Final</div></div>
+      <div class="tl-item"><div class="tl-data">até 22/06/2026</div><div class="tl-ev">Homologação do Resultado Final (DOU)</div></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <button class="fn ativo" id="fn-home" onclick="irSecao('home')"><span class="fn-i">🏠</span>Início</button>
+  <button class="fn" id="fn-leg" onclick="irSecao('legislacao')"><span class="fn-i">⚖️</span>Legislação</button>
+  <button class="fn" id="fn-esp" onclick="irSecao('especificos')"><span class="fn-i">🏢</span>Específicos</button>
+  <button class="fn" id="fn-q" onclick="irSecao('questoes')"><span class="fn-i">✏️</span>Questões</button>
+  <button class="fn" id="fn-fc" onclick="irSecao('flashcards')"><span class="fn-i">🃏</span>Flashcards</button>
+</div>
+
+<script>
+// ===== DADOS =====
+const TOPICOS = {
+  portugues:  ['pt-1','pt-2','pt-3','pt-4','pt-5'],
+  informatica:['inf-1','inf-2','inf-3','inf-4'],
+  legislacao: ['leg-1','leg-2','leg-3','leg-4','leg-5','leg-6'],
+  especificos:['esp-1','esp-2','esp-3','esp-4','esp-5','esp-6','esp-7','esp-8'],
+};
+const TOPICO_TOTAL = Object.values(TOPICOS).flat().length; // 23
+
+const QS = [
+  {a:'portugues',n:'Português',txt:'Assinale a alternativa que apresenta uso CORRETO da crase:',ops:['Ele foi à comprar mantimentos.','Refiro-me à uma servidora.','Respondeu à diretora com cordialidade.','Dirijo-me à você, Senhor Reitor.','À vista desta situação, pedimos providências.'],g:4,exp:'A) antes de verbo nunca há crase; B) antes de "uma" (artigo indefinido) não há crase; C) "à diretora" pode estar correta, mas o enunciado pede CORRETO sem sombra de dúvida; D) antes de pronome pessoal (você) não há crase; E) "À vista disso/desta situação" é locução adverbial feminina fixa — usa crase. Correto!'},
+  {a:'portugues',n:'Português',txt:'Em "Faz dois anos que o servidor não tira férias", o verbo "faz" está empregado como verbo impessoal indicando TEMPO. Ele deve ser conjugado:',ops:['No plural, concordando com "dois anos"','No singular, pois é verbo impessoal','No plural, concordando com "o servidor"','Tanto singular quanto plural são aceitos','No futuro do subjuntivo'],g:1,exp:'O verbo "fazer" quando indica tempo decorrido é IMPESSOAL — fica sempre no singular, não tem sujeito. Correto: "Faz dois anos", mesmo que haja substantivo plural logo após. O mesmo vale para "Havia muitas pessoas" (haver = existir = impessoal, sempre singular).'},
+  {a:'portugues',n:'Português',txt:'Leia: "O projeto foi aprovado, todavia sua execução ainda não foi iniciada." O conectivo "todavia" estabelece relação de:',ops:['Adição','Causa','Concessão','Oposição/Adversidade','Conclusão'],g:3,exp:'"Todavia" é conjunção adversativa, que expressa oposição ou contraste entre duas ideias. Outros adversativos: mas, porém, entretanto, contudo, no entanto. Não confundir com concessão (embora, ainda que — admite uma ideia antes de contrapor).'},
+  {a:'informatica',n:'Informática',txt:'No Microsoft Excel, qual fórmula calcula a MÉDIA dos valores nas células de B2 a B20?',ops:['=SOMA(B2:B20)/19','=MÉDIA(B2;B20)','=MÉDIA(B2:B20)','=CALCULAR.MÉDIA(B2:B20)','=AVERAGE(B2:B20)'],g:2,exp:'=MÉDIA(B2:B20) é a função correta em Excel em português para calcular a média de um intervalo contínuo. O ":"  indica intervalo (de B2 até B20). O ";" separa valores individuais. =AVERAGE seria em inglês. A função =SOMA()/19 daria a média, mas 20-2+1=19 células, além de ser forma menos prática.'},
+  {a:'informatica',n:'Informática',txt:'Um servidor público recebeu um e-mail aparentemente do banco pedindo que clique em um link para "atualizar seu cadastro" sob pena de bloqueio da conta. Esse tipo de golpe é chamado de:',ops:['Ransomware','Spyware','Phishing','Keylogger','Firewall'],g:2,exp:'Phishing é o golpe onde criminosos se passam por entidades legítimas (banco, Receita Federal, etc.) via e-mail ou site falso para roubar dados pessoais e senhas. Ransomware criptografa arquivos e pede resgate. Spyware espia silenciosamente. Keylogger registra o que você digita. Firewall é uma ferramenta de PROTEÇÃO, não um ataque.'},
+  {a:'legislacao',n:'Legislação',txt:'Conforme a Lei 8.112/1990, o servidor que se ausentar do serviço sem justificativa por mais de 30 dias consecutivos incorrerá em:',ops:['Suspensão de até 90 dias','Cassação de aposentadoria','Demissão por inassiduidade habitual','Demissão por abandono de cargo','Advertência e posterior suspensão'],g:3,exp:'Art. 138 da Lei 8.112/90: caracteriza ABANDONO DE CARGO a ausência injustificada por mais de 30 dias CONSECUTIVOS, que resulta em demissão. Cuidado com a pegadinha: inassiduidade habitual é ausência de mais de 60 DIAS INTERPOLADOS (não consecutivos) em 12 meses — também resulta em demissão, mas é outra infração!'},
+  {a:'legislacao',n:'Legislação',txt:'Os princípios constitucionais que norteiam a Administração Pública, previstos expressamente no caput do Art. 37 da CF/88, são:',ops:['Legalidade, Moralidade, Publicidade, Eficiência e Razoabilidade','Legalidade, Impessoalidade, Moralidade, Publicidade e Eficiência','Legalidade, Finalidade, Motivação, Razoabilidade e Proporcionalidade','Legalidade, Legitimidade, Economicidade, Publicidade e Eficiência','Legalidade, Isonomia, Impessoalidade, Publicidade e Eficiência'],g:1,exp:'O Art. 37 da CF/88 estabelece expressamente 5 princípios — a sigla LIMPE: Legalidade, Impessoalidade, Moralidade, Publicidade e Eficiência. A Eficiência foi acrescentada pela Emenda Constitucional 19/1998. Razoabilidade, proporcionalidade e motivação estão na Lei 9.784/99 (PAF), não no Art. 37.'},
+  {a:'legislacao',n:'Legislação',txt:'A forma de provimento que ocorre quando um servidor estável retorna ao cargo anterior por ter sido reprovado no estágio probatório de outro cargo é denominada:',ops:['Reversão','Reintegração','Readaptação','Recondução','Aproveitamento'],g:3,exp:'Recondução (Art. 29, Lei 8.112/90): retorno do servidor ao cargo anterior, que pode ocorrer por: (I) inabilitação em estágio probatório relativo a outro cargo, ou (II) reintegração do anterior ocupante. Não confunda: Reversão = retorno do aposentado; Reintegração = retorno do demitido ilegalmente; Readaptação = novo cargo por limitação física.'},
+  {a:'legislacao',n:'Legislação',txt:'De acordo com a Lei 12.527/2011 (LAI), uma informação classificada como ULTRASSECRETA pode ter prazo máximo de sigilo de:',ops:['5 anos','10 anos','15 anos','25 anos','50 anos, se renovável'],g:3,exp:'A LAI classifica o sigilo em 3 níveis: Reservada (5 anos), Secreta (15 anos) e Ultrassecreta (25 anos, prorrogável por mais 25 = máximo de 50 anos APENAS quando decorrente de tratados/acordos internacionais). Em questão simples, a resposta é 25 anos. Cuidado: informações pessoais têm restrição de 100 anos (art. 31) — isso é diferente de sigilo por razão de Estado.'},
+  {a:'especificos',n:'Específicos',txt:'Na gestão de documentos, a passagem de documentos do arquivo INTERMEDIÁRIO para o arquivo PERMANENTE é denominada:',ops:['Destinação','Transferência','Recolhimento','Avaliação','Expurgo'],g:2,exp:'RECOLHIMENTO é o termo técnico para a passagem do arquivo intermediário para o permanente. Já TRANSFERÊNCIA é a passagem do arquivo corrente para o intermediário. Destinação é o processo mais amplo (decidir entre eliminação ou guarda permanente). Expurgo é sinônimo informal de eliminação de documentos sem valor.'},
+  {a:'especificos',n:'Específicos',txt:'A ferramenta de gestão da qualidade que classifica os itens de estoque por valor, identificando que aproximadamente 20% dos itens respondem por 80% do valor total, é conhecida como:',ops:['Matriz SWOT','Diagrama de Ishikawa','Fluxograma de processos','Curva ABC','Método 5S'],g:3,exp:'A Curva ABC (baseada no Princípio de Pareto ou Regra 80/20) classifica materiais por importância relativa: Classe A = ~20% dos itens / ~80% do valor total (controle rigoroso); Classe B = importância média; Classe C = ~50-80% dos itens / ~5-20% do valor (controle simples). Aplicada também a clientes, fornecedores e problemas.'},
+  {a:'especificos',n:'Específicos',txt:'Na Nova Lei de Licitações (14.133/2021), qual modalidade é indicada para a contratação de bens e serviços COMUNS, em que os padrões de qualidade podem ser objetivamente definidos?',ops:['Concorrência','Concurso','Leilão','Pregão','Diálogo Competitivo'],g:3,exp:'O PREGÃO é a modalidade destinada à contratação de bens e serviços comuns, cujos padrões de desempenho e qualidade podem ser objetivamente definidos pelo edital, por meio de especificações usuais no mercado. Critério: menor preço ou maior desconto. É a modalidade mais usada na Adm. Pública. Concorrência = complexidade maior. Concurso = trabalho técnico/artístico. Leilão = bens inservíveis. Diálogo Competitivo = soluções inovadoras.'},
+  {a:'especificos',n:'Específicos',txt:'Segundo a Teoria de Frederick Herzberg, os fatores que quando AUSENTES geram insatisfação, mas quando PRESENTES não motivam por si só, são chamados de:',ops:['Fatores motivadores','Fatores de autorrealização','Fatores higiênicos','Fatores de estima','Fatores intrínsecos'],g:2,exp:'Na Teoria dos Dois Fatores de Herzberg: FATORES HIGIÊNICOS (extrínsecos) = quando presentes, evitam a insatisfação mas NÃO geram motivação. Ex: salário, condições físicas, políticas da empresa, segurança. FATORES MOTIVADORES (intrínsecos) = quando presentes, geram satisfação e motivação real. Ex: reconhecimento, crescimento, realização, o trabalho em si.'},
+  {a:'especificos',n:'Específicos',txt:'No ciclo da despesa pública, o ato que reserva a dotação orçamentária previamente ao pagamento de uma obrigação, comprometendo o crédito orçamentário, é denominado:',ops:['Liquidação','Pagamento','Empenho','Dotação','Suplementação'],g:2,exp:'EMPENHO é o primeiro estágio da despesa pública: é o ato pelo qual a autoridade competente cria para o Estado obrigação de pagamento, reservando dotação orçamentária suficiente. Sem empenho, não pode haver despesa. Após o empenho vem a LIQUIDAÇÃO (verificação de que o serviço foi prestado/bem entregue) e depois o PAGAMENTO (desembolso efetivo).'},
+  {a:'especificos',n:'Específicos',txt:'As funções administrativas clássicas, segundo a Teoria Geral da Administração, são representadas pela sigla PODC, que corresponde a:',ops:['Planejamento, Organização, Delegação e Controle','Planejamento, Organização, Direção e Controle','Processo, Organização, Direção e Controle','Planejamento, Operação, Direção e Comunicação','Planejamento, Organograma, Decisão e Controle'],g:1,exp:'PODC = Planejamento (definir objetivos e meios) + Organização (estruturar recursos) + Direção (liderar pessoas) + Controle (monitorar e corrigir). Essas 4 funções foram sistematizadas por Henry Fayol na Teoria Clássica da Administração. Direção também é chamada de Liderança, Coordenação ou Execução em algumas correntes.'},
+];
+
+const FCS = [
+  {a:'legislacao',p:'Qual o prazo do estágio probatório (Lei 8.112/90)?',r:'3 anos (36 meses) de efetivo exercício. Avaliado em: assiduidade, disciplina, capacidade de iniciativa, produtividade e responsabilidade.'},
+  {a:'legislacao',p:'Sigla LIMPE — o que significa?',r:'Os 5 princípios do Art. 37 da CF/88: Legalidade · Impessoalidade · Moralidade · Publicidade · Eficiência (EC 19/1998).'},
+  {a:'legislacao',p:'Prazo para tomar posse após nomeação?',r:'30 dias após publicação da nomeação. Não tomando posse → nomeação sem efeito. Após a posse: 15 dias para entrar em exercício.'},
+  {a:'legislacao',p:'Abandono de cargo vs Inassiduidade habitual',r:'Abandono: ausência injustificada por +30 dias CONSECUTIVOS → demissão. Inassiduidade: +60 dias INTERPOLADOS em 12 meses → demissão.'},
+  {a:'legislacao',p:'Licença maternidade: qual o prazo?',r:'120 dias. Pode ser prorrogada por mais 60 dias (total: 180). Licença paternidade: 5 dias, prorrogável por +15 dias (total: 20 dias).'},
+  {a:'legislacao',p:'Formas de acumulação de cargo PERMITIDAS (CF/88)',r:'(1) 2 cargos de professor; (2) 1 cargo de professor + 1 técnico/científico; (3) 2 cargos de profissional de saúde regulamentado. Sempre: compatibilidade de horários.'},
+  {a:'legislacao',p:'Prazos de sigilo da LAI (Lei 12.527/2011)',r:'Reservada: 5 anos | Secreta: 15 anos | Ultrassecreta: 25 anos. Prazo para resposta de pedido: 20 dias (prorrogável +10).'},
+  {a:'legislacao',p:'Qual a diferença entre Reintegração e Recondução?',r:'Reintegração: retorno do servidor demitido ilegalmente por decisão judicial. Recondução: retorno ao cargo anterior por inabilitação em estágio probatório ou reintegração do anterior ocupante.'},
+  {a:'legislacao',p:'Prazo de recurso no PAF (Lei 9.784/99)',r:'10 dias da ciência ou publicação da decisão. Decisão sobre o recurso: 30 dias (prorrogável +30). Decadência para anular ato favorável: 5 anos.'},
+  {a:'legislacao',p:'Plano de Carreira TAE: qual o nível do Assistente em Administração?',r:'Nível D (nível médio). Progressão por mérito: a cada 2 anos. Incentivo à qualificação: 20% para graduação acima do exigido.'},
+  {a:'especificos',p:'Ciclo vital dos documentos: nomear as 3 fases e as passagens',r:'1ª) Corrente (uso frequente) → TRANSFERÊNCIA → 2ª) Intermediário (aguarda prazo) → RECOLHIMENTO → 3ª) Permanente (guarda definitiva).'},
+  {a:'especificos',p:'Funções PODC — o que é cada uma?',r:'Planejamento (definir objetivos e meios), Organização (estruturar recursos), Direção (liderar pessoas), Controle (monitorar e corrigir desvios).'},
+  {a:'especificos',p:'O que é a Curva ABC em estoque?',r:'Classificação por valor: A = 20% itens / 80% valor (controle intenso); B = importância média; C = 80% itens / 20% valor (controle simples). Baseada no Princípio de Pareto.'},
+  {a:'especificos',p:'Herzberg: fatores higiênicos vs motivadores',r:'Higiênicos (extrínsecos): salário, condições físicas — evitam insatisfação, mas NÃO motivam. Motivadores (intrínsecos): reconhecimento, crescimento — geram motivação real.'},
+  {a:'especificos',p:'Modalidades de licitação da Lei 14.133/2021',r:'Pregão (bens comuns) · Concorrência (alta complexidade) · Concurso (trabalho técnico/artístico) · Leilão (bens inservíveis) · Diálogo Competitivo (inovação). EXTINTAS: Tomada de Preços e Convite!'},
+  {a:'especificos',p:'Ciclo PDCA — o que significa cada letra?',r:'Plan (Planejar: identificar problema e plano) → Do (Executar: implementar) → Check (Verificar: medir resultado) → Act (Agir: padronizar se OK ou reiniciar se não OK).'},
+  {a:'especificos',p:'Estágios da despesa pública (em ordem)',r:'1. Fixação (LOA) → 2. Empenho (reserva da dotação) → 3. Liquidação (confirma entrega do bem/serviço) → 4. Pagamento (desembolso efetivo).'},
+  {a:'geral',p:'Qual a diferença entre Ofício e Memorando?',r:'Ofício: comunicação externa (entre órgãos diferentes ou ao público). Memorando: comunicação interna (dentro do mesmo órgão). Ambos seguem o Padrão Ofício (4ª ed. Manual da Presidência).'},
+  {a:'geral',p:'Teoria X vs Teoria Y (McGregor)',r:'X: trabalhador é preguiçoso, foge do trabalho, precisa ser controlado — gestão autoritária. Y: trabalhador é motivado, criativo, responsável — gestão participativa e descentralizada.'},
+  {a:'geral',p:'Pirâmide de Maslow — 5 níveis (base ao topo)',r:'Base → Topo: 1) Fisiológicas (fome, sede) → 2) Segurança (emprego, proteção) → 3) Sociais (amizade, amor) → 4) Estima (reconhecimento) → 5) Autorrealização (potencial máximo).'},
+];
+
+const PLANO = [
+  {d:'Seg',t:'Lei 8.112/90 — Parte I',c:'Provimento (7 formas), Posse (30 dias), Exercício (15 dias), Requisitos'},
+  {d:'Ter',t:'Lei 8.112/90 — Parte II',c:'Estágio probatório, Estabilidade, Licenças com prazos'},
+  {d:'Qua',t:'Lei 8.112/90 — Parte III',c:'Férias (30 dias + 1/3), Penalidades (5 tipos), Abandono vs Inassiduidade'},
+  {d:'Qui',t:'CF/88 Art. 37 + Ética',c:'LIMPE, Concurso público, Nepotismo (SV13), Decreto 1.171/94'},
+  {d:'Sex',t:'Arquivística Completa',c:'Ciclo vital, transferência/recolhimento, métodos, regras alfabéticas, tabela'},
+  {d:'Sáb',t:'🔄 Revisão + Flashcards',c:'Revise Lei 8.112 e Arquivística. Faça todos os flashcards de Legislação'},
+  {d:'Dom',t:'😴 Descanso / revisão leve',c:'Leia apenas os mapas mentais de Legislação e Arquivística'},
+  {d:'Seg',t:'Redação Oficial + Correspondência',c:'Padrão Ofício 4ª ed., tipos de documentos, fechos formais'},
+  {d:'Ter',t:'Administração Geral',c:'PODC, tipos de planejamento, estruturas organizacionais, SWOT'},
+  {d:'Qua',t:'Gestão de Pessoas + Motivação',c:'Maslow, Herzberg, McGregor, Vroom, McClelland, Clima vs Cultura'},
+  {d:'Qui',t:'Licitações — Lei 14.133/2021',c:'5 modalidades, dispensa, inexigibilidade, critérios de julgamento'},
+  {d:'Sex',t:'Qualidade + Orçamento',c:'PDCA, 5S, Ishikawa, Eficiência/Eficácia/Efetividade, PPA/LDO/LOA, empenho'},
+  {d:'Sáb',t:'🔄 Simulado + Revisão',c:'Faça o simulado completo (15 questões), anote os erros e revise'},
+  {d:'Dom',t:'😴 Descanso',c:'Flashcards antes de dormir — sem estudo pesado'},
+  {d:'Seg',t:'Língua Portuguesa — Parte I',c:'Interpretação de texto (estratégias, conectivos, tipologia)'},
+  {d:'Ter',t:'Língua Portuguesa — Parte II',c:'Acentuação, crase, por que/porque, concordância, regência'},
+  {d:'Qua',t:'Informática Completa',c:'Windows (atalhos), Word/Excel (fórmulas), Internet, Segurança'},
+  {d:'Qui',t:'LAI + LGPD + PAF',c:'Lei 12.527 (prazos, sigilo), Lei 13.709 (dado sensível), Lei 9.784 (recursos)'},
+  {d:'Sex',t:'Gestão de Materiais + Patrimônio',c:'Material permanente vs consumo, Curva ABC, PEPS/UEPS, almoxarifado'},
+  {d:'Sáb',t:'🔄 Simulado Cronometrado',c:'50 questões em 3h (simule a prova real). Marque no relógio!'},
+  {d:'Dom',t:'😴 Descanso merecido',c:'Revise apenas os mapas mentais'},
+  {d:'Seg',t:'Revisão Geral — Legislação',c:'Releia todos os acordeões de legislação, foque nos prazos e penalidades'},
+  {d:'Ter',t:'Revisão Geral — Específicos I',c:'Releia Arquivística, Redação Oficial e Administração Geral'},
+  {d:'Qua',t:'Revisão Geral — Específicos II',c:'Releia Licitações, Qualidade, Orçamento, Materiais e Pessoas'},
+  {d:'Qui',t:'Revisão Geral — Português + Informática',c:'Revise todos os flashcards restantes. Faça questões de português'},
+  {d:'Sex',t:'Simulado Final + Dúvidas',c:'Resolva as questões do app. Anote dúvidas e pesquise'},
+  {d:'Sáb',t:'😴 DESCANSO TOTAL',c:'Não estude! Prepare materiais para amanhã: caneta, confirmação de inscrição, documento'},
+  {d:'Dom',t:'🔴 DIA DA PROVA — 26/04/2026',c:'Chegue 1h antes às 14h. Caneta azul/preta transparente. BOA SORTE! 🎯'},
+];
+
+// ===== ESTADO =====
+let topicosLidos = JSON.parse(localStorage.getItem('topicosLidos') || '{}');
+let diasOk = JSON.parse(localStorage.getItem('diasOk') || '[]');
+let qFiltro = 'todas', qLista = [], qAcertos = 0, qRespondidas = 0;
+let fcFiltro = 'todas', fcLista = [], fcIdx = 0, fcLembrados = new Set();
+
+// ===== COUNTDOWN =====
+function updateCD(){
+  const d = new Date('2026-04-26T14:00:00') - new Date();
+  if(d<=0){document.getElementById('cd-d').textContent=document.getElementById('cd-h').textContent=document.getElementById('cd-m').textContent='0';return}
+  const dd=Math.floor(d/86400000),hh=Math.floor((d%86400000)/3600000),mm=Math.floor((d%3600000)/60000);
+  document.getElementById('cd-d').textContent=dd;
+  document.getElementById('cd-h').textContent=String(hh).padStart(2,'0');
+  document.getElementById('cd-m').textContent=String(mm).padStart(2,'0');
+  const el=document.getElementById('home-dias');if(el)el.textContent=dd;
+}
+setInterval(updateCD,1000);updateCD();
+
+// ===== NAVEGAÇÃO =====
+function irSecao(id){
+  document.querySelectorAll('.secao').forEach(s=>s.classList.remove('ativa'));
+  document.getElementById(id).classList.add('ativa');
+  document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('ativo'));
+  document.querySelectorAll('.fn').forEach(b=>b.classList.remove('ativo'));
+  const tab=document.querySelector(`.ntab[data-sec="${id}"]`);if(tab)tab.classList.add('ativo');
+  const fn=document.getElementById('fn-'+id)||document.getElementById('fn-home');
+  if(fn)fn.classList.add('ativo');
+  window.scrollTo(0,0);
+  if(id==='questoes')renderQ();
+  if(id==='flashcards')renderFC();
+  if(id==='plano')renderPlano();
+  atualizarProg();
+}
+
+// ===== ACCORDION =====
+function toggleAcc(btn){
+  const c=btn.nextElementSibling;
+  const aberto=btn.classList.contains('aberto');
+  document.querySelectorAll('.acc-btn.aberto').forEach(b=>{b.classList.remove('aberto');b.nextElementSibling.classList.remove('vis')});
+  if(!aberto){btn.classList.add('aberto');c.classList.add('vis')}
+}
+
+// ===== TÓPICOS / CHECKBOXES =====
+function marcarTopico(id, disciplina, cb){
+  if(cb.checked) topicosLidos[id]=1; else delete topicosLidos[id];
+  localStorage.setItem('topicosLidos', JSON.stringify(topicosLidos));
+  // marca tab como concluída se todos os tópicos lidos
+  const tots = TOPICOS[disciplina] || [];
+  const lidos = tots.filter(t=>topicosLidos[t]).length;
+  const tab = document.querySelector(`.ntab[data-sec="${disciplina}"]`);
+  if(tab) tab.classList.toggle('ok', lidos===tots.length && tots.length>0);
+  atualizarProg();
+}
+
+// Restaurar checkboxes do localStorage
+function restaurarChecks(){
+  Object.keys(topicosLidos).forEach(id=>{
+    const el=document.getElementById('ck-'+id);
+    if(el) el.checked=true;
+  });
+  // tabs concluídas
+  Object.keys(TOPICOS).forEach(disc=>{
+    const tots=TOPICOS[disc];
+    const lidos=tots.filter(t=>topicosLidos[t]).length;
+    const tab=document.querySelector(`.ntab[data-sec="${disc}"]`);
+    if(tab) tab.classList.toggle('ok', lidos===tots.length && tots.length>0);
+  });
+}
+setTimeout(restaurarChecks, 100);
+
+// ===== PROGRESSO =====
+function atualizarProg(){
+  // por disciplina
+  const pdSets={};
+  Object.keys(TOPICOS).forEach(disc=>{
+    const tots=TOPICOS[disc], lidos=tots.filter(t=>topicosLidos[t]).length;
+    const pct=tots.length?Math.round(lidos/tots.length*100):0;
+    pdSets[disc]=pct;
+    const pEl=document.getElementById('dp-'+disc.slice(0,3));
+    const fEl=document.getElementById('df-'+disc.slice(0,3));
+    if(pEl) pEl.textContent=pct+'%';
+    if(fEl) fEl.style.width=pct+'%';
+  });
+  // alias especificos→esp
+  ['pt','inf','leg','esp'].forEach((short,i)=>{
+    const keys=['portugues','informatica','legislacao','especificos'];
+    const pct=pdSets[keys[i]]||0;
+    const pEl=document.getElementById('dp-'+short);
+    const fEl=document.getElementById('df-'+short);
+    if(pEl) pEl.textContent=pct+'%';
+    if(fEl) fEl.style.width=pct+'%';
+    const psEl=document.getElementById('ps-'+(['pt','inf','leg','esp','q'][i]));
+    if(psEl) psEl.textContent=pct+'%';
+  });
+
+  // questões acertos
+  const pctQ = qRespondidas>0 ? Math.round(qAcertos/qRespondidas*100) : 0;
+  // segmento questões
+  const psQ=document.getElementById('ps-q');
+  if(psQ) psQ.textContent=pctQ+'%';
+
+  // progresso geral
+  const topPct=TOPICO_TOTAL>0?Math.round(Object.keys(topicosLidos).length/TOPICO_TOTAL*100):0;
+  const diasPct=Math.round(diasOk.length/PLANO.length*100);
+  const total=Math.round((topPct+pctQ+diasPct)/3);
+
+  // barra global
+  const fill=document.getElementById('pg-fill');
+  if(fill) fill.style.width=total+'%';
+  const txt=document.getElementById('pg-pct-txt');
+  if(txt) txt.textContent=total+'%';
+
+  // cards do home
+  const hpct=document.getElementById('hpc-total');
+  const hbar=document.getElementById('hpf-total');
+  if(hpct) hpct.textContent=total+'%';
+  if(hbar) hbar.style.width=total+'%';
+
+  const htop=document.getElementById('hpc-topicos');
+  const htopb=document.getElementById('hpf-topicos');
+  const tLidos=Object.keys(topicosLidos).length;
+  if(htop) htop.textContent=tLidos+'/'+TOPICO_TOTAL;
+  if(htopb) htopb.style.width=topPct+'%';
+
+  const hq=document.getElementById('hpc-q');
+  const hqb=document.getElementById('hpf-q');
+  if(hq) hq.textContent=pctQ+'%';
+  if(hqb) hqb.style.width=pctQ+'%';
+
+  const hd=document.getElementById('hpc-dias');
+  const hdb=document.getElementById('hpf-dias');
+  if(hd) hd.textContent=diasOk.length;
+  if(hdb) hdb.style.width=diasPct+'%';
+}
+
+// ===== QUESTÕES =====
+function filtQ(f, btn){
+  qFiltro=f;
+  document.querySelectorAll('#questoes .fb').forEach(b=>b.classList.remove('ativo'));
+  btn.classList.add('ativo');
+  renderQ();
+}
+
+function renderQ(){
+  qLista = qFiltro==='todas' ? QS : QS.filter(q=>q.a===qFiltro);
+  const cMap={portugues:['#E3F2FD','#1565C0'],informatica:['#E8F5E9','#2E7D32'],legislacao:['#FFF8E1','#E65100'],especificos:['#F3E5F5','#6A1B9A']};
+  const el=document.getElementById('ql');
+  el.innerHTML='';
+  // placar
+  const sc=document.getElementById('q-score');
+  if(qRespondidas>0){sc.style.display='block';sc.innerHTML=`✅ ${qAcertos} acerto${qAcertos!==1?'s':''} de ${qRespondidas} respondida${qRespondidas!==1?'s':''} — ${Math.round(qAcertos/qRespondidas*100)}%`}
+  else sc.style.display='none';
+
+  qLista.forEach((q,i)=>{
+    const [bg,col]=cMap[q.a]||['#EEE','#333'];
+    const div=document.createElement('div');
+    div.className='q-card';
+    div.innerHTML=`
+      <div class="q-head">
+        <span class="q-num">Q${i+1}</span>
+        <span class="q-area" style="background:${bg};color:${col}">${q.n}</span>
+      </div>
+      <div class="q-txt">${q.txt}</div>
+      <div class="opcoes">${q.ops.map((o,j)=>`<button class="opcao" onclick="respQ(${i},${j},this)"><span class="op-letra">${String.fromCharCode(65+j)})</span><span>${o}</span></button>`).join('')}</div>
+      <div class="gab-exp" id="gab${i}"><strong>💡 Explicação:</strong> ${q.exp}</div>
+    `;
+    el.appendChild(div);
+  });
+}
+
+function respQ(qi,oi,btn){
+  const q=qLista[qi];
+  const card=btn.closest('.q-card');
+  if(card.dataset.resp)return;
+  card.dataset.resp='1';
+  qRespondidas++;
+  card.querySelectorAll('.opcao').forEach((o,j)=>{
+    o.style.cursor='default';
+    if(j===q.g) o.classList.add('correta');
+    else if(j===oi) o.classList.add('errada');
+  });
+  if(oi===q.g) qAcertos++;
+  const gab=document.getElementById('gab'+qi);
+  if(gab) gab.style.display='block';
+  // atualiza placar
+  const sc=document.getElementById('q-score');
+  if(sc){sc.style.display='block';sc.innerHTML=`✅ ${qAcertos} acerto${qAcertos!==1?'s':''} de ${qRespondidas} respondida${qRespondidas!==1?'s':''} — ${Math.round(qAcertos/qRespondidas*100)}%`}
+  atualizarProg();
+}
+
+// ===== FLASHCARDS =====
+function filtFC(f, btn){
+  fcFiltro=f;fcIdx=0;
+  document.querySelectorAll('#flashcards .fb').forEach(b=>b.classList.remove('ativo'));
+  btn.classList.add('ativo');
+  fcLista=fcFiltro==='todas'?FCS:FCS.filter(c=>c.a===fcFiltro);
+  renderFC();
+}
+
+function renderFC(){
+  fcLista=fcFiltro==='todas'?FCS:FCS.filter(c=>c.a===fcFiltro);
+  atualizarFC();
+}
+
+function atualizarFC(){
+  if(!fcLista.length)return;
+  const fc=fcLista[fcIdx];
+  document.getElementById('fc-p').textContent=fc.p;
+  document.getElementById('fc-r').textContent=fc.r;
+  document.getElementById('fc-n').textContent=fcIdx+1;
+  document.getElementById('fc-tot').textContent=fcLista.length;
+  const nmap={legislacao:'⚖️ Legislação',especificos:'🏢 Específicos',geral:'📚 Geral'};
+  document.getElementById('fc-area').textContent=nmap[fc.a]||fc.a;
+  document.getElementById('FC').classList.remove('flip');
+  const pct=fcLembrados.size/fcLista.length*100;
+  document.getElementById('fc-bar').style.width=pct+'%';
+  document.getElementById('fc-prog-txt').textContent=`${fcLembrados.size} lembrados de ${fcLista.length}`;
+}
+
+function flipCard(){document.getElementById('FC').classList.toggle('flip')}
+function navFC(d){fcIdx=(fcIdx+d+fcLista.length)%fcLista.length;atualizarFC()}
+function lembreiFC(){fcLembrados.add(fcIdx);atualizarFC();navFC(1)}
+
+// ===== PLANO =====
+function renderPlano(){
+  const el=document.getElementById('plan-list');
+  el.innerHTML='';
+  PLANO.forEach((p,i)=>{
+    const ok=diasOk.includes(i);
+    const div=document.createElement('div');
+    div.className='plan-dia';
+    const isProva=i===27;
+    div.innerHTML=`
+      <div class="plan-d-num" style="background:${isProva?'var(--vm)':ok?'var(--vd)':'var(--az)'}">
+        ${p.d}<span>dia${i+1}</span>
+      </div>
+      <div class="plan-d-info">
+        <div class="plan-d-tit">${p.t}</div>
+        <div class="plan-d-top">${p.c}</div>
+      </div>
+      ${isProva?'':` <div class="plan-d-ch ${ok?'ok':''}" onclick="toggleDia(${i},this)">${ok?'✓':''}</div>`}
+    `;
+    el.appendChild(div);
+  });
+}
+
+function toggleDia(i,el){
+  if(diasOk.includes(i)){diasOk=diasOk.filter(d=>d!==i);el.classList.remove('ok');el.textContent='';el.closest('.plan-dia').querySelector('.plan-d-num').style.background='var(--az)'}
+  else{diasOk.push(i);el.classList.add('ok');el.textContent='✓';el.closest('.plan-dia').querySelector('.plan-d-num').style.background='var(--vd)'}
+  localStorage.setItem('diasOk',JSON.stringify(diasOk));
+  atualizarProg();
+}
+
+// ===== INIT =====
+renderQ();
+renderFC();
+atualizarProg();
+</script>
+</body>
+</html>
